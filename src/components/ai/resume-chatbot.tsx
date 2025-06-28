@@ -64,10 +64,10 @@ export default function ResumeChatbot({ resumeData, setResumeData }: ResumeChatb
             setMessages([...newMessages, { role: "assistant", content: advice }]);
 
             if (update) {
+                const { section, id, field, value } = update;
+                
                 setResumeData(prevData => {
                     if (!prevData) return null;
-
-                    const { section, id, field, value } = update;
 
                     if (section === 'summary') {
                         return { ...prevData, summary: value };
@@ -93,7 +93,7 @@ export default function ResumeChatbot({ resumeData, setResumeData }: ResumeChatb
 
                 toast({
                     title: "Resume Updated",
-                    description: `I've updated the '${update.field}' in your ${update.section} section.`,
+                    description: `I've updated the '${field}' in your ${section} section.`,
                 });
             }
 
