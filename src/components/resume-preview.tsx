@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -53,42 +54,44 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 flex flex-col h-full bg-gray-100 dark:bg-gray-800">
-      <Card className="mb-4 no-print">
-        <CardContent className="p-4 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <LayoutTemplate className="h-5 w-5 text-primary" />
-              <Select value={template} onValueChange={setTemplate}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select Template" />
-                </Trigger>
-                <SelectContent>
-                  <SelectItem value="professional">Professional</SelectItem>
-                  <SelectItem value="modern">Modern</SelectItem>
-                  <SelectItem value="creative">Creative</SelectItem>
-                  <SelectItem value="minimalist">Minimalist</SelectItem>
-                </SelectContent>
-              </Select>
+    <>
+      <div className="p-4 sm:p-6 lg:p-8 flex flex-col h-full bg-gray-100 dark:bg-gray-800">
+        <Card className="mb-4 no-print">
+          <CardContent className="p-4 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2">
+                <LayoutTemplate className="h-5 w-5 text-primary" />
+                <Select value={template} onValueChange={setTemplate}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select Template" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="professional">Professional</SelectItem>
+                    <SelectItem value="modern">Modern</SelectItem>
+                    <SelectItem value="creative">Creative</SelectItem>
+                    <SelectItem value="minimalist">Minimalist</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <ThemeCustomizer />
             </div>
-            <ThemeCustomizer />
-          </div>
-          <div className="flex items-center gap-2">
-            <Button onClick={handlePrint} variant="outline">
-              <Download className="mr-2 h-4 w-4" />
-              Download PDF
-            </Button>
-            <Button onClick={handleShare}>
-              <Share2 className="mr-2 h-4 w-4" />
-              Share
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <div id="resume-preview" className="flex-grow bg-white shadow-lg rounded-lg">
-        {renderTemplate()}
+            <div className="flex items-center gap-2">
+              <Button onClick={handlePrint} variant="outline">
+                <Download className="mr-2 h-4 w-4" />
+                Download PDF
+              </Button>
+              <Button onClick={handleShare}>
+                <Share2 className="mr-2 h-4 w-4" />
+                Share
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <div id="resume-preview" className="flex-grow bg-white shadow-lg rounded-lg">
+          {renderTemplate()}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
