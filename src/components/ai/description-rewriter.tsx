@@ -20,7 +20,7 @@ export default function DescriptionRewriter({ jobDescription, onRewrite }: Descr
        toast({
         variant: "destructive",
         title: "Empty Description",
-        description: "Please enter a job description before rewriting.",
+        description: "Please enter a description before rewriting.",
       });
       return;
     }
@@ -31,7 +31,7 @@ export default function DescriptionRewriter({ jobDescription, onRewrite }: Descr
       onRewrite(result.rewrittenJobDescription);
       toast({
         title: "Success",
-        description: "Job description has been rewritten by AI.",
+        description: "Description has been rewritten by AI.",
         className: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100 border-green-300",
       });
     } catch (error) {

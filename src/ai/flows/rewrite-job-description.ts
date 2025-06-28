@@ -2,9 +2,9 @@
 'use server';
 
 /**
- * @fileOverview Rewrites job descriptions using AI to be more impactful and ATS-friendly.
+ * @fileOverview Rewrites a description using AI to be more impactful and professional.
  *
- * - rewriteJobDescription - A function that handles the rewriting of job descriptions.
+ * - rewriteJobDescription - A function that handles the rewriting of descriptions.
  * - RewriteJobDescriptionInput - The input type for the rewriteJobDescription function.
  * - RewriteJobDescriptionOutput - The return type for the rewriteJobDescription function.
  */
@@ -15,7 +15,7 @@ import {z} from 'genkit';
 const RewriteJobDescriptionInputSchema = z.object({
   jobDescription: z
     .string()
-    .describe('The job description to rewrite to be more impactful and ATS-friendly.'),
+    .describe('The description to rewrite.'),
 });
 export type RewriteJobDescriptionInput = z.infer<
   typeof RewriteJobDescriptionInputSchema
@@ -24,7 +24,7 @@ export type RewriteJobDescriptionInput = z.infer<
 const RewriteJobDescriptionOutputSchema = z.object({
   rewrittenJobDescription: z
     .string()
-    .describe('The rewritten job description that is more impactful and ATS-friendly.'),
+    .describe('The rewritten description.'),
 });
 export type RewriteJobDescriptionOutput = z.infer<
   typeof RewriteJobDescriptionOutputSchema
@@ -40,7 +40,7 @@ const prompt = ai.definePrompt({
   name: 'rewriteJobDescriptionPrompt',
   input: {schema: RewriteJobDescriptionInputSchema},
   output: {schema: RewriteJobDescriptionOutputSchema},
-  prompt: `Rewrite the following job description to be more impactful and ATS-friendly:
+  prompt: `Rewrite the following description to be more impactful, professional, and concise. Use strong action verbs and quantify achievements where possible:
 
 {{jobDescription}}`,
 });

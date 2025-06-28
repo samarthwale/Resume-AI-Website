@@ -300,6 +300,10 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                     <div className="space-y-2">
                       <Label htmlFor={`description-proj-${proj.id}`}>Description</Label>
                       <Textarea id={`description-proj-${proj.id}`} value={proj.description} onChange={(e) => handleDynamicChange('projects', proj.id, 'description', e.target.value)} rows={3} />
+                      <DescriptionRewriter
+                        jobDescription={proj.description}
+                        onRewrite={(newDesc) => handleDynamicChange('projects', proj.id, 'description', newDesc)}
+                      />
                     </div>
                   </div>
                 </Card>
