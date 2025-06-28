@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import ThemeCustomizer from "./theme-customizer";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { ThemeToggle } from "./theme-toggle";
 
 interface ResumePreviewProps {
   resumeData: ResumeData;
@@ -71,20 +72,24 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
       
       // Maintain aspect ratio
       const ratio = canvasWidth / canvasHeight;
-      const scaledPdfHeight = pdfWidth / ratio;
+      let scaledPdfHeight = pdfWidth / ratio;
       
-      let heightLeft = scaledPdfHeight;
+      // If the scaled height is less than the canvas height, it means we need to scale by height instead
+      if (scaledPdfHeight > canvasHeight) {
+          scaledPdfHeight = canvasHeight
+      }
+      
+      let heightLeft = canvasHeight * (pdfWidth/canvasWidth); // total height of the canvas in pdf units
       let position = 0;
-
-      // Add the first page
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledPdfHeight);
+      
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, heightLeft);
       heightLeft -= pdfHeight;
 
       // Add new pages if content overflows
       while (heightLeft > 0) {
         position -= pdfHeight; // Shift the "camera" down the canvas for the next page
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledPdfHeight);
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, canvasHeight * (pdfWidth/canvasWidth));
         heightLeft -= pdfHeight;
       }
       
@@ -123,50 +128,49 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
   };
 
   return (
-    <>
-      <div className="p-4 sm:p-6 lg:p-8 flex flex-col h-full bg-gray-100 dark:bg-gray-800">
-        <Card className="mb-4">
-          <CardContent className="p-4 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="flex items-center gap-2">
-                <LayoutTemplate className="h-5 w-5 text-primary" />
-                <Select value={template} onValueChange={setTemplate}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select Template" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="professional">Professional</SelectItem>
-                    <SelectItem value="modern">Modern</SelectItem>
-                    <SelectItem value="creative">Creative</SelectItem>
-                    <SelectItem value="minimalist">Minimalist</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <ThemeCustomizer />
-            </div>
+    <div className="p-4 sm:p-6 lg:p-8 flex flex-col h-full bg-gray-100 dark:bg-gray-800">
+      <Card className="mb-4">
+        <CardContent className="p-4 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
-              <Button onClick={handleDownload} variant="outline" disabled={isDownloading}>
-                {isDownloading ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Download className="mr-2 h-4 w-4" />
-                )}
-                Download PDF
-              </Button>
-              <Button onClick={handleShare}>
-                <Share2 className="mr-2 h-4 w-4" />
-                Share
-              </Button>
+              <LayoutTemplate className="h-5 w-5 text-primary" />
+              <Select value={template} onValueChange={setTemplate}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select Template" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="professional">Professional</SelectItem>
+                  <SelectItem value="modern">Modern</SelectItem>
+                  <SelectItem value="creative">Creative</SelectItem>
+                  <SelectItem value="minimalist">Minimalist</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-          </CardContent>
-        </Card>
-        
-        <div className="flex-grow overflow-auto flex justify-center py-4">
-            <div id="resume-preview" className="bg-white shadow-lg rounded-lg">
-                {renderTemplate()}
-            </div>
-        </div>
+            <ThemeCustomizer />
+            <ThemeToggle />
+          </div>
+          <div className="flex items-center gap-2">
+            <Button onClick={handleDownload} variant="outline" disabled={isDownloading}>
+              {isDownloading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Download className="mr-2 h-4 w-4" />
+              )}
+              Download PDF
+            </Button>
+            <Button onClick={handleShare}>
+              <Share2 className="mr-2 h-4 w-4" />
+              Share
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <div className="flex-grow overflow-auto flex justify-center py-4">
+          <div id="resume-preview" className="bg-white shadow-lg rounded-lg">
+              {renderTemplate()}
+          </div>
       </div>
-    </>
+    </div>
   );
 }
