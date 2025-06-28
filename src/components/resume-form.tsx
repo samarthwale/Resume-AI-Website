@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Trash2, PlusCircle, Upload } from "lucide-react";
+import { Trash2, PlusCircle } from "lucide-react";
 import SummaryGenerator from "@/components/ai/summary-generator";
 import DescriptionRewriter from "@/components/ai/description-rewriter";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import ResumeImporter from "@/components/ai/resume-importer";
+import JobMatcher from "@/components/ai/job-matcher";
+import { useToast } from "@/hooks/use-toast";
 
 interface ResumeFormProps {
   resumeData: ResumeData;
@@ -21,6 +23,7 @@ interface ResumeFormProps {
 
 export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProps) {
   const [newSkill, setNewSkill] = useState("");
+  const { toast } = useToast();
 
   const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!setResumeData) return;
@@ -70,6 +73,13 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
 
   const handleAddSkill = () => {
     if (newSkill.trim() && setResumeData) {
+      if (resumeData && resumeData.skills.some(s => s.toLowerCase() === newSkill.trim().toLowerCase())) {
+         toast({
+            title: "Skill Exists",
+            description: `"${newSkill.trim()}" is already in your skills list.`,
+        });
+        return;
+      }
       setResumeData(prev => prev ? { ...prev, skills: [...prev.skills, newSkill.trim()] } : null);
       setNewSkill("");
     }
@@ -78,6 +88,21 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
   const handleRemoveSkill = (skillToRemove: string) => {
     if (!setResumeData) return;
     setResumeData(prev => prev ? { ...prev, skills: prev.skills.filter(skill => skill !== skillToRemove) } : null);
+  };
+
+  const addSkillFromMatcher = (skillToAdd: string): boolean => {
+    if (!skillToAdd.trim() || !setResumeData || !resumeData) return false;
+
+    if (resumeData.skills.some(s => s.toLowerCase() === skillToAdd.trim().toLowerCase())) {
+        toast({
+            title: "Skill Exists",
+            description: `"${skillToAdd}" is already in your skills list.`,
+        });
+        return false;
+    }
+
+    setResumeData(prev => prev ? { ...prev, skills: [...prev.skills, skillToAdd.trim()] } : null);
+    return true;
   };
   
   if (!resumeData) return null;
@@ -239,9 +264,15 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                   </Badge>
                 ))}
               </div>
-              <div className="flex gap-2">
-                <Input placeholder="Add a new skill" value={newSkill} onChange={e => setNewSkill(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleAddSkill()} />
-                <Button onClick={handleAddSkill}><PlusCircle className="mr-2 h-4 w-4" /> Add Skill</Button>
+              <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t items-center">
+                  <div className="flex-grow flex gap-2 w-full">
+                      <Input placeholder="Add skill manually" value={newSkill} onChange={e => setNewSkill(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleAddSkill()} />
+                      <Button onClick={handleAddSkill} className="shrink-0"><PlusCircle className="mr-2 h-4 w-4" /> Add</Button>
+                  </div>
+                  <span className="text-sm text-muted-foreground hidden sm:inline">OR</span>
+                   <div className="shrink-0">
+                     <JobMatcher currentSkills={resumeData.skills} onAddSkill={addSkillFromMatcher} />
+                  </div>
               </div>
             </AccordionContent>
           </Card>
