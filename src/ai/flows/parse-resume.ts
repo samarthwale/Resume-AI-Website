@@ -54,7 +54,7 @@ export type ParseResumeOutput = z.infer<typeof ParseResumeOutputSchema>;
 
 const ParseResumeInputSchema = z.object({
   resumeFile: z.string().describe(
-      "A resume file, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'. Supported formats are PDF and DOCX."
+      "A resume file, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'. Supported format is PDF."
     ),
 });
 export type ParseResumeInput = z.infer<typeof ParseResumeInputSchema>;

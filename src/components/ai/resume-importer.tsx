@@ -80,7 +80,7 @@ export default function ResumeImporter({ onImport }: ResumeImporterProps) {
         ref={fileInputRef}
         onChange={handleFileChange}
         style={{ display: "none" }}
-        accept=".pdf,.doc,.docx"
+        accept=".pdf"
         disabled={isLoading}
       />
       <Button onClick={handleButtonClick} disabled={isLoading} variant="outline">
