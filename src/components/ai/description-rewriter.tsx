@@ -29,17 +29,16 @@ export default function DescriptionRewriter({ jobDescription, onRewrite }: Descr
     try {
       const result = await rewriteJobDescription({ jobDescription });
       onRewrite(result.rewrittenJobDescription);
-      toast({
-        title: "Success",
-        description: "Description has been rewritten by AI.",
-        className: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100 border-green-300",
-      });
     } catch (error) {
       console.error("Error rewriting description:", error);
+      let description = "Could not rewrite the description. Please try again.";
+      if (error instanceof Error && (error.message.includes('503') || error.message.toLowerCase().includes('overloaded'))) {
+        description = "The AI service is currently busy. Please try again in a few moments.";
+      }
       toast({
         variant: "destructive",
         title: "AI Rewrite Failed",
-        description: "Could not rewrite the description. Please try again.",
+        description,
       });
     } finally {
       setIsLoading(false);

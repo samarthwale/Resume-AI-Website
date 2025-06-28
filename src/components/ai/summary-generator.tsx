@@ -50,10 +50,14 @@ export default function SummaryGenerator({ currentSummary, onSummaryGenerated, u
       setGeneratedSummary(result.summary);
     } catch (error) {
       console.error("Error generating summary:", error);
+      let description = "Could not generate a summary. Please try again.";
+      if (error instanceof Error && (error.message.includes('503') || error.message.toLowerCase().includes('overloaded'))) {
+        description = "The AI service is currently busy. Please try again in a few moments.";
+      }
       toast({
         variant: "destructive",
         title: "AI Generation Failed",
-        description: "Could not generate a summary. Please try again.",
+        description,
       });
     } finally {
       setIsLoading(false);

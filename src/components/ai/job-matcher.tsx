@@ -44,10 +44,14 @@ export default function JobMatcher({ currentSkills, onAddSkill }: JobMatcherProp
       setResults(result);
     } catch (error) {
       console.error("Error matching job:", error);
+      let description = "Could not analyze the job description. Please try again.";
+      if (error instanceof Error && (error.message.includes('503') || error.message.toLowerCase().includes('overloaded'))) {
+        description = "The AI service is currently busy. Please try again in a few moments.";
+      }
       toast({
         variant: "destructive",
         title: "AI Analysis Failed",
-        description: "Could not analyze the job description. Please try again.",
+        description,
       });
     } finally {
       setIsLoading(false);
@@ -60,7 +64,6 @@ export default function JobMatcher({ currentSkills, onAddSkill }: JobMatcherProp
       toast({
           title: `Skill Added`,
           description: `"${skill}" has been added to your skills list.`,
-          className: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100 border-green-300",
       });
     }
   };
