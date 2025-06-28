@@ -7,11 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Trash2, PlusCircle, Wand2 } from "lucide-react";
+import { Trash2, PlusCircle, Upload } from "lucide-react";
 import SummaryGenerator from "@/components/ai/summary-generator";
 import DescriptionRewriter from "@/components/ai/description-rewriter";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import ResumeImporter from "@/components/ai/resume-importer";
 
 interface ResumeFormProps {
   resumeData: ResumeData;
@@ -84,8 +85,13 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
   return (
     <div className="p-6 space-y-6">
       <header className="space-y-1">
-        <h1 className="text-3xl font-bold text-primary font-headline">ResumeFlow AI</h1>
-        <p className="text-muted-foreground">Fill in your details below to generate a professional resume.</p>
+        <div className="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-primary font-headline">ResumeFlow AI</h1>
+            <p className="text-muted-foreground">Fill in your details below or import an existing resume.</p>
+          </div>
+          <ResumeImporter onImport={(data) => setResumeData(data)} />
+        </div>
       </header>
 
       <Accordion type="multiple" defaultValue={["item-1"]} className="w-full space-y-4">
