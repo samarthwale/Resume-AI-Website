@@ -93,7 +93,7 @@ export default function ResumeChatbot({ resumeData, setResumeData }: ResumeChatb
 
                 toast({
                     title: "Resume Updated",
-                    description: `I've updated the '${field}' in your ${section} section.`,
+                    description: `I've updated the '${update.field}' in your ${update.section} section.`,
                 });
             }
 
