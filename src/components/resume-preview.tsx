@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import ProfessionalTemplate from "./templates/professional-template";
 import ModernTemplate from "./templates/modern-template";
 import CreativeTemplate from "./templates/creative-template";
+import MinimalistTemplate from "./templates/minimalist-template";
 import { Button } from "./ui/button";
 import { Download, Share2, LayoutTemplate } from "lucide-react";
 import {
@@ -42,6 +43,8 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
         return <ModernTemplate data={resumeData} />;
       case "creative":
         return <CreativeTemplate data={resumeData} />;
+      case "minimalist":
+        return <MinimalistTemplate data={resumeData} />;
       case "professional":
       default:
         return <ProfessionalTemplate data={resumeData} />;
@@ -62,6 +65,7 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
                 <SelectItem value="professional">Professional</SelectItem>
                 <SelectItem value="modern">Modern</SelectItem>
                 <SelectItem value="creative">Creative</SelectItem>
+                <SelectItem value="minimalist">Minimalist</SelectItem>
               </SelectContent>
             </Select>
           </div>
