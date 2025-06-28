@@ -6,6 +6,7 @@ import ResumeForm from "@/components/resume-form";
 import ResumePreview from "@/components/resume-preview";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
+import ResumeChatbot from "@/components/ai/resume-chatbot";
 
 const initialResumeData: ResumeData = {
   personalInfo: {
@@ -84,6 +85,7 @@ export default function ResumeEditor() {
       <ScrollArea className="h-screen bg-white">
         <ResumePreview resumeData={resumeData} />
       </ScrollArea>
+      <ResumeChatbot resumeData={resumeData} />
     </div>
   );
 }
