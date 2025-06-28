@@ -11,7 +11,7 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects } = data;
 
     return (
-        <div className="p-10 font-body bg-white text-gray-900 min-h-[1123px]">
+        <div className="p-10 font-body bg-white text-gray-900 w-[794px] min-h-[1123px]">
             <header className="mb-10 text-center">
                 <h1 className="text-4xl font-bold tracking-tight font-headline">{personalInfo.name}</h1>
                 <p className="mt-2 text-sm text-gray-500">

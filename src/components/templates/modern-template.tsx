@@ -12,7 +12,7 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects } = data;
 
     return (
-        <div className="font-body bg-white text-gray-800 flex min-h-[1123px]">
+        <div className="font-body bg-white text-gray-800 flex w-[794px] min-h-[1123px]">
             {/* Left Sidebar */}
             <aside className="w-1/3 bg-gray-800 text-white p-8">
                 <h1 className="text-3xl font-bold text-white mb-2 font-headline">{personalInfo.name}</h1>

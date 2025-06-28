@@ -24,7 +24,7 @@ export default function ProfessionalTemplate({ data }: TemplateProps) {
   const { personalInfo, summary, experience, education, skills, projects } = data;
 
   return (
-    <div className="p-8 font-body bg-white text-gray-800 A4-size">
+    <div className="p-8 font-body bg-white text-gray-800 w-[794px] min-h-[1123px]">
       <header className="text-center mb-8">
         <h1 className="text-4xl font-bold text-primary font-headline">{personalInfo.name}</h1>
         <div className="flex justify-center items-center flex-wrap gap-x-4 gap-y-2 text-xs mt-2 text-gray-600">

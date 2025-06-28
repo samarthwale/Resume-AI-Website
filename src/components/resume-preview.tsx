@@ -32,7 +32,8 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
   const { toast } = useToast();
 
   const handleDownload = async () => {
-    const resumeElement = document.getElementById("resume-preview");
+    // We target the first child of the preview div, which is the actual template component
+    const resumeElement = document.getElementById("resume-preview")?.firstChild as HTMLElement;
     if (!resumeElement) {
       toast({
         variant: "destructive",
@@ -46,23 +47,47 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
 
     try {
       const canvas = await html2canvas(resumeElement, {
-        scale: 2, // Use a higher scale for better resolution
+        scale: 2,
         useCORS: true,
+        logging: false, // Disables logging for cleaner console
+        width: resumeElement.scrollWidth, // Use scrollWidth to capture full content width
+        height: resumeElement.scrollHeight, // Use scrollHeight to capture full content height
       });
 
       const imgData = canvas.toDataURL('image/png');
       
+      // Use 'px' as units for more direct mapping from canvas to PDF
       const pdf = new jsPDF({
         orientation: 'portrait',
-        unit: 'pt',
+        unit: 'px',
         format: 'a4',
       });
 
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+      
+      // Maintain aspect ratio
+      const ratio = canvasWidth / canvasHeight;
+      const scaledPdfHeight = pdfWidth / ratio;
+      
+      let heightLeft = scaledPdfHeight;
+      let position = 0;
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      // Add the first page
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledPdfHeight);
+      heightLeft -= pdfHeight;
+
+      // Add new pages if content overflows
+      while (heightLeft > 0) {
+        position -= pdfHeight; // Shift the "camera" down the canvas for the next page
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledPdfHeight);
+        heightLeft -= pdfHeight;
+      }
+      
       pdf.save(`${resumeData.personalInfo.name.replace(/ /g, '_')}_Resume.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);

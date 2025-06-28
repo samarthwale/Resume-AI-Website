@@ -26,7 +26,7 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects } = data;
 
     return (
-        <div className="p-8 font-body bg-slate-50 text-slate-800 min-h-[1123px]">
+        <div className="p-8 font-body bg-slate-50 text-slate-800 w-[794px] min-h-[1123px]">
             <header className="grid grid-cols-3 gap-8 items-center mb-8">
                 <div className="col-span-1">
                     <div className="w-32 h-32 rounded-full overflow-hidden mx-auto bg-slate-200">
