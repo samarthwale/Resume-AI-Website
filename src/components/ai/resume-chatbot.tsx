@@ -18,9 +18,10 @@ interface ChatMessage {
 
 interface ResumeChatbotProps {
     resumeData: ResumeData;
+    setResumeData: React.Dispatch<React.SetStateAction<ResumeData | null>>;
 }
 
-export default function ResumeChatbot({ resumeData }: ResumeChatbotProps) {
+export default function ResumeChatbot({ resumeData, setResumeData }: ResumeChatbotProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [input, setInput] = useState("");
@@ -29,9 +30,9 @@ export default function ResumeChatbot({ resumeData }: ResumeChatbotProps) {
     const scrollAreaRef = useRef<HTMLDivElement>(null);
 
     const suggestionPrompts = [
-        "How can I improve my professional summary?",
-        "Is my latest work experience impactful enough?",
-        "Suggest some strong skills for a web developer role.",
+        "Rewrite my professional summary to be more impactful.",
+        "Is my latest work experience descriptive enough?",
+        "How can I improve the description for my first project?",
     ];
 
     useEffect(() => {
@@ -57,7 +58,45 @@ export default function ResumeChatbot({ resumeData }: ResumeChatbotProps) {
                 resumeJson: JSON.stringify(resumeData, null, 2),
                 question: question,
             });
-            setMessages([...newMessages, { role: "assistant", content: result.advice }]);
+            
+            const { advice, update } = result;
+
+            setMessages([...newMessages, { role: "assistant", content: advice }]);
+
+            if (update) {
+                setResumeData(prevData => {
+                    if (!prevData) return null;
+
+                    const { section, id, field, value } = update;
+
+                    if (section === 'summary') {
+                        return { ...prevData, summary: value };
+                    }
+                    
+                    if (section === 'personalInfo' && field in prevData.personalInfo) {
+                        const key = field as keyof typeof prevData.personalInfo;
+                        return { ...prevData, personalInfo: { ...prevData.personalInfo, [key]: value } };
+                    }
+
+                    if (['experience', 'education', 'projects'].includes(section)) {
+                        const sectionKey = section as 'experience' | 'education' | 'projects';
+                        const list = prevData[sectionKey] as any[];
+                        const updatedList = list.map(item =>
+                            item.id === id ? { ...item, [field]: value } : item
+                        );
+                        return { ...prevData, [sectionKey]: updatedList };
+                    }
+                    
+                    console.warn('AI tried to update an unknown section or field:', update);
+                    return prevData;
+                });
+
+                toast({
+                    title: "Resume Updated",
+                    description: `I've updated the '${field}' in your ${section} section.`,
+                });
+            }
+
         } catch (error) {
             console.error("Chatbot error:", error);
             const errorMessage = "Sorry, I had trouble getting advice. Please try again in a moment.";
@@ -95,7 +134,7 @@ export default function ResumeChatbot({ resumeData }: ResumeChatbotProps) {
                     <SheetHeader>
                         <SheetTitle>AI Career Coach</SheetTitle>
                         <SheetDescription>
-                            Get instant feedback and suggestions to improve your resume.
+                            Get instant feedback and suggestions to improve your resume. Ask me to make changes for you!
                         </SheetDescription>
                     </SheetHeader>
                     <ScrollArea className="flex-grow my-4" ref={scrollAreaRef}>
@@ -108,7 +147,7 @@ export default function ResumeChatbot({ resumeData }: ResumeChatbotProps) {
                                         </Avatar>
                                      )}
                                     <div className={`rounded-lg px-4 py-2 max-w-[80%] whitespace-pre-wrap ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                                        <p className="text-sm">{message.content}</p>
+                                        <div className="text-sm" dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br />') }} />
                                     </div>
                                 </div>
                             ))}
@@ -140,7 +179,7 @@ export default function ResumeChatbot({ resumeData }: ResumeChatbotProps) {
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                                placeholder="Ask a question..."
+                                placeholder="Ask me to rewrite something..."
                                 disabled={isLoading}
                             />
                             <Button onClick={() => handleSendMessage()} disabled={isLoading}>

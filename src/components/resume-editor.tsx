@@ -85,7 +85,7 @@ export default function ResumeEditor() {
       <ScrollArea className="h-screen bg-white">
         <ResumePreview resumeData={resumeData} />
       </ScrollArea>
-      <ResumeChatbot resumeData={resumeData} />
+      <ResumeChatbot resumeData={resumeData} setResumeData={setResumeData} />
     </div>
   );
 }

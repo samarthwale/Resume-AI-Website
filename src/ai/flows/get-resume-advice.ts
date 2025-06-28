@@ -1,7 +1,7 @@
 'use server';
 
 /**
- * @fileOverview A chatbot flow for providing resume advice.
+ * @fileOverview A chatbot flow for providing resume advice and making direct edits.
  *
  * - getResumeAdvice - A function that provides AI-powered suggestions for a resume.
  * - GetResumeAdviceInput - The input type for the getResumeAdvice function.
@@ -17,8 +17,18 @@ const GetResumeAdviceInputSchema = z.object({
 });
 export type GetResumeAdviceInput = z.infer<typeof GetResumeAdviceInputSchema>;
 
+
+const ResumeUpdateSchema = z.object({
+    section: z.enum(['summary', 'experience', 'education', 'projects', 'personalInfo']).describe("The top-level section of the resume to be updated."),
+    id: z.string().optional().describe('The ID of a specific item within a section (e.g., for an experience entry). Not required for singleton sections like "summary".'),
+    field: z.string().describe('The specific field within the section or item to update (e.g., "description", "summary", "jobTitle").'),
+    value: z.string().describe('The new content for the specified field.'),
+}).describe('A specific, single update to be applied to the resume.');
+
+
 const GetResumeAdviceOutputSchema = z.object({
-  advice: z.string().describe('The AI-generated advice for the user\'s resume.'),
+  advice: z.string().describe("The AI-generated advice or a confirmation message for an action taken."),
+  update: ResumeUpdateSchema.optional().describe("A structured object representing a change to the resume. This should only be populated if the user explicitly asks for a change to be made."),
 });
 export type GetResumeAdviceOutput = z.infer<typeof GetResumeAdviceOutputSchema>;
 
@@ -34,7 +44,16 @@ const prompt = ai.definePrompt({
 
 A user has a question about their resume. Their current resume data is provided below as a JSON object. Analyze their resume and their question to provide a helpful, concise, and well-formatted answer.
 
-If the question is general, provide general tips. If it's about a specific section (like "summary" or "experience"), focus your advice there. Use markdown for formatting, like lists or bold text, to make the advice easy to read.
+**Important**: If the user asks you to directly change, rewrite, or update a part of their resume, you MUST perform the following steps:
+1.  Generate the new text for the requested section.
+2.  Populate the 'update' object in the output with the details of the change.
+    - 'section': The top-level key in the JSON to change (e.g., 'summary', 'experience').
+    - 'id': If changing an item in a list (like experience or education), find the correct item's 'id' from the JSON and use it.
+    - 'field': The specific property within the object to change (e.g., 'description', 'jobTitle', 'summary'). For the main summary, the field is 'summary'.
+    - 'value': The new text content.
+3.  Set the 'advice' field to a confirmation message, like "I've updated that for you. Here is the new version:" and then include the new text.
+
+If the question is for general advice, provide tips without populating the 'update' object. Use markdown for formatting, like lists or bold text, to make the advice easy to read.
 
 Resume Data:
 \`\`\`json
