@@ -62,7 +62,7 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
               <Select value={template} onValueChange={setTemplate}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select Template" />
-                </SelectTrigger>
+                </Trigger>
                 <SelectContent>
                   <SelectItem value="professional">Professional</SelectItem>
                   <SelectItem value="modern">Modern</SelectItem>
@@ -86,7 +86,7 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
         </CardContent>
       </Card>
       
-      <div id="resume-preview" className="flex-grow bg-white shadow-lg rounded-lg overflow-auto">
+      <div id="resume-preview" className="flex-grow bg-white shadow-lg rounded-lg">
         {renderTemplate()}
       </div>
     </div>

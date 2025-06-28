@@ -69,25 +69,32 @@
 }
 
 @media print {
+  /* This ensures the scrollable area doesn't clip content when printing. */
+  [data-radix-scroll-area-viewport] {
+    overflow: visible !important;
+  }
+  
   body * {
     visibility: hidden;
   }
+  
   #resume-preview, #resume-preview * {
     visibility: visible;
   }
+  
   #resume-preview {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
-    transform: scale(0.95);
-    transform-origin: top left;
+    height: auto; /* Let content define height */
+    transform: none; /* Remove scaling */
     margin: 0;
     padding: 0;
     border: none;
     box-shadow: none;
   }
+  
   .no-print {
     display: none;
   }
