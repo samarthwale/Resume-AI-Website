@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { ResumeData, Experience, Education, Project } from "@/types/resume";
@@ -69,6 +70,11 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
         const list = prev[section] as { id: string }[];
         return { ...prev, [section]: list.filter(item => item.id !== id) };
     });
+    const sectionName = section.charAt(0).toUpperCase() + section.slice(1);
+    toast({
+      title: `${sectionName} Entry Removed`,
+      description: `The item has been successfully deleted.`,
+    });
   };
 
   const handleAddSkill = () => {
@@ -88,6 +94,10 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
   const handleRemoveSkill = (skillToRemove: string) => {
     if (!setResumeData) return;
     setResumeData(prev => prev ? { ...prev, skills: prev.skills.filter(skill => skill !== skillToRemove) } : null);
+    toast({
+      title: `Skill Removed`,
+      description: `"${skillToRemove}" has been removed from your skills.`,
+    });
   };
 
   const addSkillFromMatcher = (skillToAdd: string): boolean => {
