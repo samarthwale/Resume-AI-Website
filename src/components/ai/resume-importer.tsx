@@ -39,8 +39,8 @@ export default function ResumeImporter({ onImport }: ResumeImporterProps) {
 
         onImport(fullResumeData);
         toast({
-          title: "Success",
-          description: "Your resume has been imported and parsed by AI.",
+          title: "Import Successful",
+          description: "Your resume has been parsed and the form has been automatically filled.",
           className: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100 border-green-300",
         });
       } catch (error) {
