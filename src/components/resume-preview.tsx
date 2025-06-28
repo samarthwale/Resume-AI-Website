@@ -47,7 +47,7 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
 
     try {
       const canvas = await html2canvas(resumeElement, {
-        scale: 2,
+        scale: 3, // Increased scale for better quality text
         useCORS: true,
         logging: false, // Disables logging for cleaner console
         width: resumeElement.scrollWidth, // Use scrollWidth to capture full content width
