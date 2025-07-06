@@ -21,6 +21,7 @@ import ThemeCustomizer from "./theme-customizer";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ThemeToggle } from "./theme-toggle";
+import FontSizer from "./font-sizer";
 
 interface ResumePreviewProps {
   resumeData: ResumeData;
@@ -29,6 +30,7 @@ interface ResumePreviewProps {
 export default function ResumePreview({ resumeData }: ResumePreviewProps) {
   const [template, setTemplate] = useState("professional");
   const [isDownloading, setIsDownloading] = useState(false);
+  const [fontSize, setFontSize] = useState(14);
   const { toast } = useToast();
 
   const handleDownload = async () => {
@@ -56,40 +58,29 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
 
       const imgData = canvas.toDataURL('image/png');
       
-      // Use 'px' as units for more direct mapping from canvas to PDF
+      const a4Width = 595.28;
+      const a4Height = 841.89;
+
       const pdf = new jsPDF({
         orientation: 'portrait',
-        unit: 'px',
+        unit: 'pt',
         format: 'a4',
       });
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      
       const canvasWidth = canvas.width;
       const canvasHeight = canvas.height;
       
-      // Maintain aspect ratio
       const ratio = canvasWidth / canvasHeight;
-      let scaledPdfHeight = pdfWidth / ratio;
       
-      // If the scaled height is less than the canvas height, it means we need to scale by height instead
-      if (scaledPdfHeight > canvasHeight) {
-          scaledPdfHeight = canvasHeight
-      }
+      let pdfCanvasHeight = a4Width / ratio;
+      let totalPages = Math.ceil(pdfCanvasHeight / a4Height);
       
-      let heightLeft = canvasHeight * (pdfWidth/canvasWidth); // total height of the canvas in pdf units
-      let position = 0;
-      
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, heightLeft);
-      heightLeft -= pdfHeight;
-
-      // Add new pages if content overflows
-      while (heightLeft > 0) {
-        position -= pdfHeight; // Shift the "camera" down the canvas for the next page
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, canvasHeight * (pdfWidth/canvasWidth));
-        heightLeft -= pdfHeight;
+      for (let i = 0; i < totalPages; i++) {
+          if (i > 0) {
+              pdf.addPage();
+          }
+          const yPosition = -(a4Height * i);
+          pdf.addImage(imgData, 'PNG', 0, yPosition, a4Width, pdfCanvasHeight);
       }
       
       pdf.save(`${resumeData.personalInfo.name.replace(/ /g, '_')}_Resume.pdf`);
@@ -139,6 +130,7 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
               </Select>
             </div>
             <ThemeCustomizer />
+            <FontSizer onSizeChange={setFontSize} defaultValue={fontSize} />
             <ThemeToggle />
           </div>
           <div className="flex items-center gap-2">
@@ -155,7 +147,7 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
       </Card>
       
       <div className="flex-grow overflow-auto flex justify-center py-4">
-          <div id="resume-preview" className="bg-white shadow-lg rounded-lg">
+          <div id="resume-preview" className="bg-white shadow-lg rounded-lg" style={{ fontSize: `${fontSize}px` }}>
               {renderTemplate()}
           </div>
       </div>
