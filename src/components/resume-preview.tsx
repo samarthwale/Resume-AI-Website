@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -9,7 +8,7 @@ import ModernTemplate from "./templates/modern-template";
 import CreativeTemplate from "./templates/creative-template";
 import MinimalistTemplate from "./templates/minimalist-template";
 import { Button } from "./ui/button";
-import { Download, Share2, LayoutTemplate, Loader2 } from "lucide-react";
+import { Download, LayoutTemplate, Loader2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -106,13 +105,6 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
     }
   };
 
-  const handleShare = () => {
-    toast({
-      title: "Coming Soon!",
-      description: "The shareable link feature is under development.",
-    });
-  };
-
   const renderTemplate = () => {
     switch (template) {
       case "modern":
@@ -157,10 +149,6 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
                 <Download className="mr-2 h-4 w-4" />
               )}
               Download PDF
-            </Button>
-            <Button onClick={handleShare}>
-              <Share2 className="mr-2 h-4 w-4" />
-              Share
             </Button>
           </div>
         </CardContent>

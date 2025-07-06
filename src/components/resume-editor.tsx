@@ -79,7 +79,7 @@ export default function ResumeEditor() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 h-screen max-h-screen">
-      <ScrollArea className="h-screen no-print">
+      <ScrollArea className="h-screen">
         <ResumeForm resumeData={resumeData} setResumeData={setResumeData} />
       </ScrollArea>
       <ScrollArea className="h-screen bg-white print:h-auto">
