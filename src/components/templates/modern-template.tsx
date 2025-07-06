@@ -15,11 +15,11 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
         <div className="font-body bg-white text-gray-800 flex w-[794px] min-h-[1123px]">
             {/* Left Sidebar */}
             <aside className="w-1/3 bg-gray-800 text-white p-8">
-                <h1 className="text-3xl font-bold text-white mb-2 font-headline">{personalInfo.name}</h1>
+                <h1 className="text-[1.875em] font-bold text-white mb-2 font-headline">{personalInfo.name}</h1>
                 
                 <section className="mt-8">
-                    <h2 className="text-lg font-semibold text-primary uppercase tracking-wider mb-3">Contact</h2>
-                    <div className="text-sm space-y-2 text-gray-300">
+                    <h2 className="text-[1.125em] font-semibold text-primary uppercase tracking-wider mb-3">Contact</h2>
+                    <div className="text-[0.875em] space-y-2 text-gray-300">
                         {personalInfo.email && <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-2 hover:text-primary transition-colors"><Mail size={14} /><span>{personalInfo.email}</span></a>}
                         {personalInfo.phone && <a href={`tel:${personalInfo.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors"><Phone size={14} /><span>{personalInfo.phone}</span></a>}
                         {personalInfo.linkedin && <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Linkedin size={14} /><span>LinkedIn</span></a>}
@@ -29,10 +29,10 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
 
                 {skills && skills.length > 0 && (
                   <section className="mt-8">
-                      <h2 className="text-lg font-semibold text-primary uppercase tracking-wider mb-3">Skills</h2>
+                      <h2 className="text-[1.125em] font-semibold text-primary uppercase tracking-wider mb-3">Skills</h2>
                       <div className="flex flex-wrap gap-2">
                           {skills.map(skill => (
-                              <span key={skill} className="bg-gray-700 text-white text-xs font-medium px-3 py-1 rounded-md">{skill}</span>
+                              <span key={skill} className="bg-gray-700 text-white text-[0.75em] font-medium px-3 py-1 rounded-md">{skill}</span>
                           ))}
                       </div>
                   </section>
@@ -40,13 +40,13 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
 
                 {education && education.length > 0 && (
                   <section className="mt-8">
-                      <h2 className="text-lg font-semibold text-primary uppercase tracking-wider mb-3">Education</h2>
-                      <div className="space-y-4 text-sm">
+                      <h2 className="text-[1.125em] font-semibold text-primary uppercase tracking-wider mb-3">Education</h2>
+                      <div className="space-y-4 text-[0.875em]">
                           {education.map(edu => (
                               <div key={edu.id}>
-                                  <h3 className="font-semibold text-base text-white">{edu.institution}</h3>
+                                  <h3 className="font-semibold text-[1em] text-white">{edu.institution}</h3>
                                   <p className="text-gray-300">{edu.degree}</p>
-                                  <p className="text-xs text-gray-400 mt-1">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
+                                  <p className="text-[0.75em] text-gray-400 mt-1">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
                               </div>
                           ))}
                       </div>
@@ -58,23 +58,23 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
             <main className="w-2/3 p-8">
                 {summary && (
                   <section className="mb-8">
-                      <h2 className="text-2xl font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">Summary</h2>
-                      <p className="text-sm text-gray-700">{summary}</p>
+                      <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">Summary</h2>
+                      <p className="text-[0.875em] text-gray-700">{summary}</p>
                   </section>
                 )}
                 
                 {experience && experience.length > 0 && (
                   <section className="mb-8">
-                      <h2 className="text-2xl font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">Experience</h2>
+                      <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">Experience</h2>
                       <div className="space-y-5">
                           {experience.map(exp => (
                               <div key={exp.id}>
                                   <div className="flex justify-between items-baseline">
-                                      <h3 className="text-lg font-semibold text-gray-900">{exp.jobTitle}</h3>
-                                      <p className="text-sm text-gray-500">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
+                                      <h3 className="text-[1.125em] font-semibold text-gray-900">{exp.jobTitle}</h3>
+                                      <p className="text-[0.875em] text-gray-500">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
                                   </div>
-                                  <p className="text-md font-medium text-primary italic">{exp.company}</p>
-                                  <div className="mt-2 text-sm text-gray-600 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
+                                  <p className="text-[1em] font-medium text-primary italic">{exp.company}</p>
+                                  <div className="mt-2 text-[0.875em] text-gray-600 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
                               </div>
                           ))}
                       </div>
@@ -83,17 +83,17 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
 
                 {projects && projects.length > 0 && (
                   <section>
-                      <h2 className="text-2xl font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">Projects</h2>
+                      <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">Projects</h2>
                       <div className="space-y-4">
                           {projects.map(proj => (
                               <div key={proj.id}>
                                   <div className="flex items-center gap-2">
-                                      <h3 className="font-semibold text-lg text-gray-900">{proj.name}</h3>
+                                      <h3 className="font-semibold text-[1.125em] text-gray-900">{proj.name}</h3>
                                       {proj.url && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                                           <Globe size={16} />
                                       </a>}
                                   </div>
-                                  <p className="mt-1 text-sm text-gray-600">{proj.description}</p>
+                                  <p className="mt-1 text-[0.875em] text-gray-600">{proj.description}</p>
                               </div>
                           ))}
                       </div>

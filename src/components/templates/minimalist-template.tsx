@@ -20,9 +20,9 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
     return (
         <div className="p-10 font-body bg-white text-gray-900 w-[794px] min-h-[1123px]">
             <header className="mb-10 text-center">
-                <h1 className="text-4xl font-bold tracking-tight font-headline">{personalInfo.name}</h1>
+                <h1 className="text-[2.25em] font-bold tracking-tight font-headline">{personalInfo.name}</h1>
                  {contactInfo.length > 0 && (
-                    <p className="mt-2 text-sm text-gray-500">
+                    <p className="mt-2 text-[0.875em] text-gray-500">
                         {contactInfo.join(' | ')}
                     </p>
                 )}
@@ -31,25 +31,25 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
             <main>
                 {summary && (
                   <section className="mb-8">
-                      <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-3">Summary</h2>
-                      <p className="text-sm text-gray-700 leading-relaxed">{summary}</p>
+                      <h2 className="text-[0.875em] font-bold uppercase tracking-widest text-gray-500 mb-3">Summary</h2>
+                      <p className="text-[0.875em] text-gray-700 leading-relaxed">{summary}</p>
                   </section>
                 )}
 
                 {experience && experience.length > 0 && (
                   <section className="mb-8">
-                      <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Experience</h2>
+                      <h2 className="text-[0.875em] font-bold uppercase tracking-widest text-gray-500 mb-4">Experience</h2>
                       <div className="space-y-5">
                           {experience.map(exp => (
                               <div key={exp.id}>
                                   <div className="flex justify-between items-start">
                                       <div>
-                                          <h3 className="text-base font-semibold">{exp.jobTitle}</h3>
-                                          <p className="text-sm text-gray-600">{exp.company}</p>
+                                          <h3 className="text-[1em] font-semibold">{exp.jobTitle}</h3>
+                                          <p className="text-[0.875em] text-gray-600">{exp.company}</p>
                                       </div>
-                                      <p className="text-xs text-gray-500 text-right shrink-0 ml-4">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
+                                      <p className="text-[0.75em] text-gray-500 text-right shrink-0 ml-4">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
                                   </div>
-                                  <div className="mt-1.5 text-sm text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="mr-2">&ndash;</span>') }} />
+                                  <div className="mt-1.5 text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="mr-2">&ndash;</span>') }} />
                               </div>
                           ))}
                       </div>
@@ -58,17 +58,17 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
 
                 {projects && projects.length > 0 && (
                   <section className="mb-8">
-                      <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Projects</h2>
+                      <h2 className="text-[0.875em] font-bold uppercase tracking-widest text-gray-500 mb-4">Projects</h2>
                       <div className="space-y-4">
                           {projects.map(proj => (
                               <div key={proj.id}>
                                   <div className="flex justify-between items-start">
-                                      <h3 className="text-base font-semibold">{proj.name}</h3>
-                                       {proj.url && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline shrink-0 ml-4">
+                                      <h3 className="text-[1em] font-semibold">{proj.name}</h3>
+                                       {proj.url && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-[0.75em] text-primary hover:underline shrink-0 ml-4">
                                           View Project
                                        </a>}
                                   </div>
-                                  <p className="mt-1 text-sm text-gray-700">{proj.description}</p>
+                                  <p className="mt-1 text-[0.875em] text-gray-700">{proj.description}</p>
                               </div>
                           ))}
                       </div>
@@ -78,13 +78,13 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
                 <div className="grid grid-cols-2 gap-x-12">
                      {education && education.length > 0 && (
                        <section>
-                          <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Education</h2>
+                          <h2 className="text-[0.875em] font-bold uppercase tracking-widest text-gray-500 mb-4">Education</h2>
                           <div className="space-y-3">
                               {education.map(edu => (
                                   <div key={edu.id}>
-                                      <h3 className="text-base font-semibold">{edu.institution}</h3>
-                                      <p className="text-sm text-gray-600">{edu.degree}</p>
-                                      <p className="text-xs text-gray-500 mt-0.5">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
+                                      <h3 className="text-[1em] font-semibold">{edu.institution}</h3>
+                                      <p className="text-[0.875em] text-gray-600">{edu.degree}</p>
+                                      <p className="text-[0.75em] text-gray-500 mt-0.5">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
                                   </div>
                               ))}
                           </div>
@@ -93,8 +93,8 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
 
                     {skills && skills.length > 0 && (
                       <section>
-                          <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Skills</h2>
-                          <p className="text-sm text-gray-700 leading-relaxed">
+                          <h2 className="text-[0.875em] font-bold uppercase tracking-widest text-gray-500 mb-4">Skills</h2>
+                          <p className="text-[0.875em] text-gray-700 leading-relaxed">
                               {skills.join(' • ')}
                           </p>
                       </section>
