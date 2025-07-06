@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -8,7 +9,15 @@ import ModernTemplate from "./templates/modern-template";
 import CreativeTemplate from "./templates/creative-template";
 import MinimalistTemplate from "./templates/minimalist-template";
 import { Button } from "./ui/button";
-import { Download, LayoutTemplate, Loader2 } from "lucide-react";
+import { Download, LayoutTemplate, Loader2, Eye } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -22,6 +31,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ThemeToggle } from "./theme-toggle";
 import FontSizer from "./font-sizer";
+import Image from "next/image";
 
 interface ResumePreviewProps {
   resumeData: ResumeData;
@@ -29,61 +39,100 @@ interface ResumePreviewProps {
 
 export default function ResumePreview({ resumeData }: ResumePreviewProps) {
   const [template, setTemplate] = useState("professional");
-  const [isDownloading, setIsDownloading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [fontSize, setFontSize] = useState(14);
   const { toast } = useToast();
 
-  const handleDownload = async () => {
-    // We target the first child of the preview div, which is the actual template component
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+
+  const generatePreview = async () => {
     const resumeElement = document.getElementById("resume-preview")?.firstChild as HTMLElement;
     if (!resumeElement) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Could not find the resume element to download.",
+        description: "Could not find the resume element to preview.",
       });
-      return;
+      return null;
     }
 
-    setIsDownloading(true);
+    setIsGenerating(true);
 
     try {
       const canvas = await html2canvas(resumeElement, {
-        scale: 3, // Increased scale for better quality text
+        scale: 3,
         useCORS: true,
-        logging: false, // Disables logging for cleaner console
-        width: resumeElement.scrollWidth, // Use scrollWidth to capture full content width
-        height: resumeElement.scrollHeight, // Use scrollHeight to capture full content height
+        logging: false,
+        width: resumeElement.scrollWidth,
+        height: resumeElement.scrollHeight,
       });
+      return canvas.toDataURL('image/png');
+    } catch (error) {
+       console.error("Error generating preview:", error);
+       toast({
+        variant: "destructive",
+        title: "Preview Failed",
+        description: "There was an issue creating the preview. Please try again.",
+      });
+      return null;
+    } finally {
+        setIsGenerating(false);
+    }
+  }
 
-      const imgData = canvas.toDataURL('image/png');
-      
-      const a4Width = 595.28;
-      const a4Height = 841.89;
+  const handlePreviewClick = async () => {
+    const imageUrl = await generatePreview();
+    if (imageUrl) {
+      setPreviewImageUrl(imageUrl);
+      setIsPreviewOpen(true);
+    }
+  };
 
+  const handleDownload = async () => {
+    if (!previewImageUrl) {
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "No preview available to download.",
+        });
+        return;
+    }
+
+    setIsGenerating(true);
+    try {
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'pt',
         format: 'a4',
       });
-
-      const canvasWidth = canvas.width;
-      const canvasHeight = canvas.height;
       
-      const ratio = canvasWidth / canvasHeight;
-      
-      let pdfCanvasHeight = a4Width / ratio;
-      let totalPages = Math.ceil(pdfCanvasHeight / a4Height);
-      
-      for (let i = 0; i < totalPages; i++) {
-          if (i > 0) {
-              pdf.addPage();
-          }
-          const yPosition = -(a4Height * i);
-          pdf.addImage(imgData, 'PNG', 0, yPosition, a4Width, pdfCanvasHeight);
+      const img = new window.Image();
+      img.src = previewImageUrl;
+      img.onload = () => {
+        const a4Width = 595.28;
+        const a4Height = 841.89;
+        
+        const imgWidth = img.width;
+        const imgHeight = img.height;
+        
+        const ratio = imgWidth / imgHeight;
+        
+        let pdfCanvasHeight = a4Width / ratio;
+        let totalPages = Math.ceil(pdfCanvasHeight / a4Height);
+        
+        for (let i = 0; i < totalPages; i++) {
+            if (i > 0) {
+                pdf.addPage();
+            }
+            const yPosition = -(a4Height * i);
+            pdf.addImage(previewImageUrl, 'PNG', 0, yPosition, a4Width, pdfCanvasHeight);
+        }
+        
+        pdf.save(`${resumeData.personalInfo.name.replace(/ /g, '_')}_Resume.pdf`);
+        setIsPreviewOpen(false);
+        setPreviewImageUrl(null);
       }
-      
-      pdf.save(`${resumeData.personalInfo.name.replace(/ /g, '_')}_Resume.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast({
@@ -92,7 +141,7 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
         description: "There was an issue creating the PDF. Please try again.",
       });
     } finally {
-      setIsDownloading(false);
+      setIsGenerating(false);
     }
   };
 
@@ -111,46 +160,91 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 flex flex-col h-full bg-gray-100 dark:bg-gray-800">
-      <Card className="mb-4">
-        <CardContent className="p-4 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <LayoutTemplate className="h-5 w-5 text-primary" />
-              <Select value={template} onValueChange={setTemplate}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select Template" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="professional">Professional</SelectItem>
-                  <SelectItem value="modern">Modern</SelectItem>
-                  <SelectItem value="creative">Creative</SelectItem>
-                  <SelectItem value="minimalist">Minimalist</SelectItem>
-                </SelectContent>
-              </Select>
+    <>
+      <div className="p-4 sm:p-6 lg:p-8 flex flex-col h-full bg-gray-100 dark:bg-gray-800">
+        <Card className="mb-4">
+          <CardContent className="p-4 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2">
+                <LayoutTemplate className="h-5 w-5 text-primary" />
+                <Select value={template} onValueChange={setTemplate}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select Template" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="professional">Professional</SelectItem>
+                    <SelectItem value="modern">Modern</SelectItem>
+                    <SelectItem value="creative">Creative</SelectItem>
+                    <SelectItem value="minimalist">Minimalist</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <ThemeCustomizer />
+              <FontSizer onSizeChange={setFontSize} defaultValue={fontSize} />
+              <ThemeToggle />
             </div>
-            <ThemeCustomizer />
-            <FontSizer onSizeChange={setFontSize} defaultValue={fontSize} />
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <Button onClick={handlePreviewClick} variant="outline" disabled={isGenerating}>
+                {isGenerating ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Eye className="mr-2 h-4 w-4" />
+                )}
+                Preview & Download
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <div className="flex-grow overflow-auto flex justify-center py-4">
+            <div id="resume-preview" className="bg-white shadow-lg rounded-lg" style={{ fontSize: `${fontSize}px` }}>
+                {renderTemplate()}
+            </div>
+        </div>
+      </div>
+
+      <Dialog open={isPreviewOpen} onOpenChange={(open) => {
+        if (!open) {
+          setPreviewImageUrl(null);
+        }
+        setIsPreviewOpen(open);
+      }}>
+        <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle>PDF Preview</DialogTitle>
+            <DialogDescription>
+              This is a preview of your final PDF. If it looks good, confirm the download.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex-grow my-4 bg-gray-200 dark:bg-gray-900 rounded-md overflow-auto flex justify-center p-4">
+            {previewImageUrl && (
+              <Image 
+                src={previewImageUrl} 
+                alt="Resume Preview"
+                width={794}
+                height={1123}
+                style={{
+                    width: 'auto',
+                    height: 'auto',
+                    maxWidth: '100%',
+                }}
+                className="shadow-lg"
+              />
+            )}
           </div>
-          <div className="flex items-center gap-2">
-            <Button onClick={handleDownload} variant="outline" disabled={isDownloading}>
-              {isDownloading ? (
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setIsPreviewOpen(false)}>Cancel</Button>
+            <Button onClick={handleDownload} disabled={isGenerating || !previewImageUrl}>
+               {isGenerating ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 <Download className="mr-2 h-4 w-4" />
               )}
-              Download PDF
+              Confirm Download
             </Button>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <div className="flex-grow overflow-auto flex justify-center py-4">
-          <div id="resume-preview" className="bg-white shadow-lg rounded-lg" style={{ fontSize: `${fontSize}px` }}>
-              {renderTemplate()}
-          </div>
-      </div>
-    </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
