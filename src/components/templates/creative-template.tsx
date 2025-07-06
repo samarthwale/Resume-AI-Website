@@ -42,8 +42,10 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                 </div>
                 <div className="col-span-2 text-right">
                     <h1 className="text-5xl font-extrabold text-primary font-headline">{personalInfo.name}</h1>
-                    <p className="text-xl text-slate-500 mt-1">Professional Summary</p>
-                    <p className="text-sm mt-4 text-slate-600">{summary}</p>
+                    {summary && <>
+                      <p className="text-xl text-slate-500 mt-1">Professional Summary</p>
+                      <p className="text-sm mt-4 text-slate-600">{summary}</p>
+                    </>}
                 </div>
             </header>
             
@@ -61,55 +63,63 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                            <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Github size={14} /><span>{personalInfo.github}</span></a>
                         </div>
                     </section>
-                    <section>
-                        <h2 className="text-xl font-bold text-primary mb-4">Skills</h2>
-                        <div className="flex flex-wrap gap-2">
-                            {skills.map(skill => (
-                                <span key={skill} className="bg-primary/10 text-primary-800 text-xs font-semibold px-3 py-1 rounded-md">{skill}</span>
-                            ))}
-                        </div>
-                    </section>
-                    <section>
-                        <h2 className="text-xl font-bold text-primary mb-4">Projects</h2>
-                        <div className="space-y-4">
-                        {projects.map(proj => (
-                            <div key={proj.id}>
-                                <div className="flex items-center gap-2">
-                                    <h3 className="font-semibold text-base text-slate-800">{proj.name}</h3>
-                                    <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                        <Globe size={14} />
-                                    </a>
-                                </div>
-                                <p className="mt-1 text-sm text-slate-600">{proj.description}</p>
-                            </div>
-                        ))}
-                        </div>
-                    </section>
+                    {skills && skills.length > 0 && (
+                      <section>
+                          <h2 className="text-xl font-bold text-primary mb-4">Skills</h2>
+                          <div className="flex flex-wrap gap-2">
+                              {skills.map(skill => (
+                                  <span key={skill} className="bg-primary/10 text-primary-800 text-xs font-semibold px-3 py-1 rounded-md">{skill}</span>
+                              ))}
+                          </div>
+                      </section>
+                    )}
+                    {projects && projects.length > 0 && (
+                      <section>
+                          <h2 className="text-xl font-bold text-primary mb-4">Projects</h2>
+                          <div className="space-y-4">
+                          {projects.map(proj => (
+                              <div key={proj.id}>
+                                  <div className="flex items-center gap-2">
+                                      <h3 className="font-semibold text-base text-slate-800">{proj.name}</h3>
+                                      <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                          <Globe size={14} />
+                                      </a>
+                                  </div>
+                                  <p className="mt-1 text-sm text-slate-600">{proj.description}</p>
+                              </div>
+                          ))}
+                          </div>
+                      </section>
+                    )}
                 </div>
 
                 {/* Right col */}
                 <div className="col-span-2">
-                    <section>
-                         <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Career Timeline</h2>
-                         {experience.map(exp => (
-                            <TimelineItem key={exp.id} icon={<Briefcase size={20} />}>
-                                 <p className="text-xs text-slate-500 -mt-8 mb-2">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
-                                <h3 className="font-bold text-lg text-slate-900">{exp.jobTitle}</h3>
-                                <p className="text-md font-medium text-slate-600 italic">{exp.company}</p>
-                                <div className="mt-2 text-sm text-slate-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
-                            </TimelineItem>
-                         ))}
-                    </section>
-                    <section className="mt-8">
-                         <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Education</h2>
-                         {education.map(edu => (
-                            <TimelineItem key={edu.id} icon={<GraduationCap size={20} />}>
-                                 <p className="text-xs text-slate-500 -mt-8 mb-2">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
-                                <h3 className="font-bold text-lg text-slate-900">{edu.institution}</h3>
-                                <p className="text-md font-medium text-slate-600">{edu.degree}</p>
-                            </TimelineItem>
-                         ))}
-                    </section>
+                    {experience && experience.length > 0 && (
+                      <section>
+                           <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Career Timeline</h2>
+                           {experience.map(exp => (
+                              <TimelineItem key={exp.id} icon={<Briefcase size={20} />}>
+                                   <p className="text-xs text-slate-500 -mt-8 mb-2">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
+                                  <h3 className="font-bold text-lg text-slate-900">{exp.jobTitle}</h3>
+                                  <p className="text-md font-medium text-slate-600 italic">{exp.company}</p>
+                                  <div className="mt-2 text-sm text-slate-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
+                              </TimelineItem>
+                           ))}
+                      </section>
+                    )}
+                    {education && education.length > 0 && (
+                      <section className="mt-8">
+                           <h2 className="text-2xl font-bold text-primary mb-6 font-headline">Education</h2>
+                           {education.map(edu => (
+                              <TimelineItem key={edu.id} icon={<GraduationCap size={20} />}>
+                                   <p className="text-xs text-slate-500 -mt-8 mb-2">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
+                                  <h3 className="font-bold text-lg text-slate-900">{edu.institution}</h3>
+                                  <p className="text-md font-medium text-slate-600">{edu.degree}</p>
+                              </TimelineItem>
+                           ))}
+                      </section>
+                    )}
                 </div>
             </div>
         </div>

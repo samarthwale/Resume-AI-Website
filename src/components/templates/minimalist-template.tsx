@@ -20,66 +20,76 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
             </header>
 
             <main>
-                <section className="mb-8">
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-3">Summary</h2>
-                    <p className="text-sm text-gray-700 leading-relaxed">{summary}</p>
-                </section>
+                {summary && (
+                  <section className="mb-8">
+                      <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-3">Summary</h2>
+                      <p className="text-sm text-gray-700 leading-relaxed">{summary}</p>
+                  </section>
+                )}
 
-                <section className="mb-8">
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Experience</h2>
-                    <div className="space-y-5">
-                        {experience.map(exp => (
-                            <div key={exp.id}>
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <h3 className="text-base font-semibold">{exp.jobTitle}</h3>
-                                        <p className="text-sm text-gray-600">{exp.company}</p>
-                                    </div>
-                                    <p className="text-xs text-gray-500 text-right shrink-0 ml-4">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
-                                </div>
-                                <div className="mt-1.5 text-sm text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="mr-2">&ndash;</span>') }} />
-                            </div>
-                        ))}
-                    </div>
-                </section>
+                {experience && experience.length > 0 && (
+                  <section className="mb-8">
+                      <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Experience</h2>
+                      <div className="space-y-5">
+                          {experience.map(exp => (
+                              <div key={exp.id}>
+                                  <div className="flex justify-between items-start">
+                                      <div>
+                                          <h3 className="text-base font-semibold">{exp.jobTitle}</h3>
+                                          <p className="text-sm text-gray-600">{exp.company}</p>
+                                      </div>
+                                      <p className="text-xs text-gray-500 text-right shrink-0 ml-4">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
+                                  </div>
+                                  <div className="mt-1.5 text-sm text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="mr-2">&ndash;</span>') }} />
+                              </div>
+                          ))}
+                      </div>
+                  </section>
+                )}
 
-                <section className="mb-8">
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Projects</h2>
-                    <div className="space-y-4">
-                        {projects.map(proj => (
-                            <div key={proj.id}>
-                                <div className="flex justify-between items-start">
-                                    <h3 className="text-base font-semibold">{proj.name}</h3>
-                                     <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline shrink-0 ml-4">
-                                        View Project
-                                     </a>
-                                </div>
-                                <p className="mt-1 text-sm text-gray-700">{proj.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+                {projects && projects.length > 0 && (
+                  <section className="mb-8">
+                      <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Projects</h2>
+                      <div className="space-y-4">
+                          {projects.map(proj => (
+                              <div key={proj.id}>
+                                  <div className="flex justify-between items-start">
+                                      <h3 className="text-base font-semibold">{proj.name}</h3>
+                                       <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline shrink-0 ml-4">
+                                          View Project
+                                       </a>
+                                  </div>
+                                  <p className="mt-1 text-sm text-gray-700">{proj.description}</p>
+                              </div>
+                          ))}
+                      </div>
+                  </section>
+                )}
 
                 <div className="grid grid-cols-2 gap-x-12">
-                     <section>
-                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Education</h2>
-                        <div className="space-y-3">
-                            {education.map(edu => (
-                                <div key={edu.id}>
-                                    <h3 className="text-base font-semibold">{edu.institution}</h3>
-                                    <p className="text-sm text-gray-600">{edu.degree}</p>
-                                    <p className="text-xs text-gray-500 mt-0.5">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                     {education && education.length > 0 && (
+                       <section>
+                          <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Education</h2>
+                          <div className="space-y-3">
+                              {education.map(edu => (
+                                  <div key={edu.id}>
+                                      <h3 className="text-base font-semibold">{edu.institution}</h3>
+                                      <p className="text-sm text-gray-600">{edu.degree}</p>
+                                      <p className="text-xs text-gray-500 mt-0.5">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
+                                  </div>
+                              ))}
+                          </div>
+                      </section>
+                     )}
 
-                    <section>
-                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Skills</h2>
-                        <p className="text-sm text-gray-700 leading-relaxed">
-                            {skills.join(' • ')}
-                        </p>
-                    </section>
+                    {skills && skills.length > 0 && (
+                      <section>
+                          <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">Skills</h2>
+                          <p className="text-sm text-gray-700 leading-relaxed">
+                              {skills.join(' • ')}
+                          </p>
+                      </section>
+                    )}
                 </div>
 
             </main>
