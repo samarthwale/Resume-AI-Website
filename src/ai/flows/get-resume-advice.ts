@@ -44,14 +44,14 @@ const prompt = ai.definePrompt({
 
 A user has a question about their resume. Their current resume data is provided below as a JSON object. Analyze their resume and their question to provide a helpful, concise, and well-formatted answer.
 
-**Important**: If the user asks you to directly change, rewrite, or update a part of their resume, you MUST perform the following steps:
-1.  Generate the new text for the requested section.
+**Important**: If the user asks you to directly change, rewrite, update, or remove a part of their resume, you MUST perform the following steps:
+1.  Generate the new text for the requested section. To remove an item (like a link), set its 'value' to an empty string.
 2.  Populate the 'update' object in the output with the details of the change.
-    - 'section': The top-level key in the JSON to change (e.g., 'summary', 'experience').
+    - 'section': The top-level key in the JSON to change (e.g., 'summary', 'experience', 'personalInfo').
     - 'id': If changing an item in a list (like experience or education), find the correct item's 'id' from the JSON and use it.
-    - 'field': The specific property within the object to change (e.g., 'description', 'jobTitle', 'summary'). For the main summary, the field is 'summary'.
-    - 'value': The new text content.
-3.  Set the 'advice' field to a confirmation message, like "I've updated that for you. Here is the new version:" and then include the new text.
+    - 'field': The specific property within the object to change (e.g., 'description', 'jobTitle', 'summary', 'github'). For the main summary, the field is 'summary'.
+    - 'value': The new text content (or an empty string for removal).
+3.  Set the 'advice' field to a confirmation message, like "I've updated that for you."
 
 If the question is for general advice, provide tips without populating the 'update' object. Use markdown for formatting, like lists or bold text, to make the advice easy to read.
 

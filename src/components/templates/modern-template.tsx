@@ -20,10 +20,10 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
                 <section className="mt-8">
                     <h2 className="text-lg font-semibold text-primary uppercase tracking-wider mb-3">Contact</h2>
                     <div className="text-sm space-y-2 text-gray-300">
-                        <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-2 hover:text-primary transition-colors"><Mail size={14} /><span>{personalInfo.email}</span></a>
-                        <a href={`tel:${personalInfo.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors"><Phone size={14} /><span>{personalInfo.phone}</span></a>
-                        <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Linkedin size={14} /><span>LinkedIn</span></a>
-                        <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Github size={14} /><span>GitHub</span></a>
+                        {personalInfo.email && <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-2 hover:text-primary transition-colors"><Mail size={14} /><span>{personalInfo.email}</span></a>}
+                        {personalInfo.phone && <a href={`tel:${personalInfo.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors"><Phone size={14} /><span>{personalInfo.phone}</span></a>}
+                        {personalInfo.linkedin && <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Linkedin size={14} /><span>LinkedIn</span></a>}
+                        {personalInfo.github && <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Github size={14} /><span>GitHub</span></a>}
                     </div>
                 </section>
 
@@ -89,9 +89,9 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
                               <div key={proj.id}>
                                   <div className="flex items-center gap-2">
                                       <h3 className="font-semibold text-lg text-gray-900">{proj.name}</h3>
-                                      <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                      {proj.url && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                                           <Globe size={16} />
-                                      </a>
+                                      </a>}
                                   </div>
                                   <p className="mt-1 text-sm text-gray-600">{proj.description}</p>
                               </div>

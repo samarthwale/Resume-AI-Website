@@ -9,14 +9,23 @@ const formatDate = (dateString: string) => {
 
 export default function MinimalistTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects } = data;
+    
+    const contactInfo = [
+        personalInfo.email,
+        personalInfo.phone,
+        personalInfo.linkedin,
+        personalInfo.github,
+    ].filter(Boolean);
 
     return (
         <div className="p-10 font-body bg-white text-gray-900 w-[794px] min-h-[1123px]">
             <header className="mb-10 text-center">
                 <h1 className="text-4xl font-bold tracking-tight font-headline">{personalInfo.name}</h1>
-                <p className="mt-2 text-sm text-gray-500">
-                    {personalInfo.email} | {personalInfo.phone} | {personalInfo.linkedin} | {personalInfo.github}
-                </p>
+                 {contactInfo.length > 0 && (
+                    <p className="mt-2 text-sm text-gray-500">
+                        {contactInfo.join(' | ')}
+                    </p>
+                )}
             </header>
 
             <main>
@@ -55,9 +64,9 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
                               <div key={proj.id}>
                                   <div className="flex justify-between items-start">
                                       <h3 className="text-base font-semibold">{proj.name}</h3>
-                                       <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline shrink-0 ml-4">
+                                       {proj.url && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline shrink-0 ml-4">
                                           View Project
-                                       </a>
+                                       </a>}
                                   </div>
                                   <p className="mt-1 text-sm text-gray-700">{proj.description}</p>
                               </div>
