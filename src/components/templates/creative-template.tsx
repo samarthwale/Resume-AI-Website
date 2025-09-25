@@ -1,5 +1,6 @@
+
 import type { ResumeData } from "@/types/resume";
-import { Mail, Phone, Linkedin, Github, Globe, Briefcase, GraduationCap } from "lucide-react";
+import { Mail, Phone, Linkedin, Github, Globe, Briefcase, GraduationCap, FolderKanban } from "lucide-react";
 import Image from 'next/image';
 
 const formatDate = (dateString: string) => {
@@ -23,7 +24,7 @@ const TimelineItem: React.FC<{ icon: React.ReactNode; children: React.ReactNode 
 
 
 export default function CreativeTemplate({ data }: { data: ResumeData }) {
-    const { personalInfo, summary, experience, education, skills, projects } = data;
+    const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
 
     return (
         <div className="p-8 font-body bg-slate-50 text-slate-800 w-[794px] min-h-[1123px]">
@@ -120,6 +121,14 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                            ))}
                       </section>
                     )}
+                     {customSections && customSections.length > 0 && customSections.map(section => (
+                        <section key={section.id} className="mt-8">
+                           <h2 className="text-[1.5em] font-bold text-primary mb-6 font-headline">{section.title}</h2>
+                           <TimelineItem icon={<FolderKanban size={20} />}>
+                                <div className="mt-2 text-[0.875em] text-slate-700 whitespace-pre-line -mt-8" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
+                           </TimelineItem>
+                        </section>
+                     ))}
                 </div>
             </div>
         </div>

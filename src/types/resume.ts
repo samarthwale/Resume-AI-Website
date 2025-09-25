@@ -1,3 +1,4 @@
+
 export interface ResumeData {
   personalInfo: {
     name: string;
@@ -11,6 +12,7 @@ export interface ResumeData {
   education: Education[];
   skills: string[];
   projects: Project[];
+  customSections: CustomSection[];
 }
 
 export interface Experience {
@@ -35,4 +37,10 @@ export interface Project {
   name: string;
   description: string;
   url: string;
+}
+
+export interface CustomSection {
+  id: string;
+  title: string;
+  description: string;
 }

@@ -1,3 +1,4 @@
+
 import type { ResumeData } from "@/types/resume";
 import { Mail, Phone, Linkedin, Github, Globe } from "lucide-react";
 
@@ -21,7 +22,7 @@ const formatDate = (dateString: string) => {
 
 
 export default function ProfessionalTemplate({ data }: TemplateProps) {
-  const { personalInfo, summary, experience, education, skills, projects } = data;
+  const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
 
   return (
     <div className="p-8 font-body bg-white text-gray-800 w-[794px] min-h-[1123px]">
@@ -73,6 +74,12 @@ export default function ProfessionalTemplate({ data }: TemplateProps) {
           </div>
         </Section>
       )}
+
+      {customSections && customSections.length > 0 && customSections.map(section => (
+        <Section key={section.id} title={section.title}>
+          <div className="mt-1.5 text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '<span class="text-primary mr-2">•</span>') }} />
+        </Section>
+      ))}
       
       <div className="grid grid-cols-2 gap-8">
         {education && education.length > 0 && (

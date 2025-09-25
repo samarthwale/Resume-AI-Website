@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -42,6 +43,12 @@ const ProjectSchema = z.object({
   url: z.string().describe('The URL of the project, if available.'),
 });
 
+const CustomSectionSchema = z.object({
+  title: z.string().describe("The title of the custom section."),
+  description: z.string().describe("The content of the custom section."),
+});
+
+
 const ParseResumeOutputSchema = z.object({
   personalInfo: PersonalInfoSchema,
   summary: z.string().describe('A professional summary.'),
@@ -49,6 +56,7 @@ const ParseResumeOutputSchema = z.object({
   education: z.array(EducationSchema).describe('A list of educational qualifications.'),
   skills: z.array(z.string()).describe('A list of skills.'),
   projects: z.array(ProjectSchema).describe('A list of projects.'),
+  customSections: z.array(CustomSectionSchema).describe('A list of custom sections. Do not parse content into this field, return an empty array.'),
 });
 export type ParseResumeOutput = z.infer<typeof ParseResumeOutputSchema>;
 
@@ -72,7 +80,7 @@ const prompt = ai.definePrompt({
 - For all dates, use the 'YYYY-MM' format. If only a year is provided, use 'YYYY-01'.
 - For experience descriptions, maintain the original content but ensure each distinct point or sentence starts on a new line with a '• ' bullet point.
 - For LinkedIn and GitHub, extract just the username or profile identifier, not the full URL (e.g., 'yourprofile' from 'linkedin.com/in/yourprofile').
-- If a section (like projects) is not present, return an empty array for it.
+- If a section (like projects or custom sections) is not present, return an empty array for it. For custom sections, always return an empty array for now.
 
 Resume File: {{media url=resumeFile}}`,
 });

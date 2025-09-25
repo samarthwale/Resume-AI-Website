@@ -1,3 +1,4 @@
+
 import type { ResumeData } from "@/types/resume";
 import { Mail, Phone, Linkedin, Github, Globe } from "lucide-react";
 
@@ -9,7 +10,7 @@ const formatDate = (dateString: string) => {
 };
 
 export default function ModernTemplate({ data }: { data: ResumeData }) {
-    const { personalInfo, summary, experience, education, skills, projects } = data;
+    const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
 
     return (
         <div className="font-body bg-white text-gray-800 flex w-[794px] min-h-[1123px]">
@@ -99,6 +100,13 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
                       </div>
                   </section>
                 )}
+                
+                {customSections && customSections.length > 0 && customSections.map(section => (
+                    <section key={section.id} className="mt-8">
+                        <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">{section.title}</h2>
+                        <div className="mt-2 text-[0.875em] text-gray-600 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
+                    </section>
+                ))}
             </main>
         </div>
     );

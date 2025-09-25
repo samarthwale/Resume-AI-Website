@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -22,6 +23,7 @@ const initialResumeData: ResumeData = {
   education: [],
   skills: ["React", "TypeScript", "Node.js", "Tailwind CSS", "Firebase"],
   projects: [],
+  customSections: [],
 };
 
 export default function ResumeEditor() {
@@ -59,6 +61,7 @@ export default function ResumeEditor() {
           url: "your-resume-flow-ai.com",
         },
       ],
+      customSections: [],
     });
   }, []);
 

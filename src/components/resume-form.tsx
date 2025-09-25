@@ -1,7 +1,7 @@
 
 "use client";
 
-import type { ResumeData, Experience, Education, Project } from "@/types/resume";
+import type { ResumeData, Experience, Education, Project, CustomSection } from "@/types/resume";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -37,7 +37,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
     setResumeData(prev => prev ? { ...prev, summary: e.target.value } : null);
   };
 
-  const handleDynamicChange = <T extends Experience | Education | Project>(
+  const handleDynamicChange = <T extends Experience | Education | Project | CustomSection>(
     section: keyof ResumeData,
     id: string,
     field: keyof T,
@@ -323,6 +323,37 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
           </Card>
         </AccordionItem>
         
+        <AccordionItem value="item-7" className="border-none">
+           <Card>
+            <AccordionTrigger className="p-6 text-lg font-semibold">Custom Sections</AccordionTrigger>
+            <AccordionContent className="px-6 space-y-4">
+              {resumeData.customSections.map((section, index) => (
+                <Card key={section.id} className="p-4">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-semibold">Custom Section #{index + 1}</h4>
+                      <Button variant="ghost" size="icon" onClick={() => removeDynamicItem('customSections', section.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor={`title-custom-${section.id}`}>Section Title</Label>
+                        <Input id={`title-custom-${section.id}`} value={section.title} onChange={(e) => handleDynamicChange('customSections', section.id, 'title', e.target.value)} />
+                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`description-custom-${section.id}`}>Content</Label>
+                      <Textarea id={`description-custom-${section.id}`} value={section.description} onChange={(e) => handleDynamicChange('customSections', section.id, 'description', e.target.value)} rows={4} />
+                       <DescriptionRewriter
+                          jobDescription={section.description}
+                          onRewrite={(newDesc) => handleDynamicChange('customSections', section.id, 'description', newDesc)}
+                        />
+                    </div>
+                  </div>
+                </Card>
+              ))}
+              <Button variant="outline" onClick={() => addDynamicItem('customSections', { id: crypto.randomUUID(), title: 'New Section', description: '' })}><PlusCircle className="mr-2 h-4 w-4"/>Add Custom Section</Button>
+            </AccordionContent>
+          </Card>
+        </AccordionItem>
+
       </Accordion>
     </div>
   );

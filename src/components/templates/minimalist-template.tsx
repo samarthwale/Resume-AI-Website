@@ -1,3 +1,4 @@
+
 import type { ResumeData } from "@/types/resume";
 
 const formatDate = (dateString: string) => {
@@ -8,7 +9,7 @@ const formatDate = (dateString: string) => {
 };
 
 export default function MinimalistTemplate({ data }: { data: ResumeData }) {
-    const { personalInfo, summary, experience, education, skills, projects } = data;
+    const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
     
     const contactInfo = [
         personalInfo.email,
@@ -74,6 +75,13 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
                       </div>
                   </section>
                 )}
+
+                {customSections && customSections.length > 0 && customSections.map(section => (
+                    <section key={section.id} className="mb-8">
+                        <h2 className="text-[0.875em] font-bold uppercase tracking-widest text-gray-500 mb-4">{section.title}</h2>
+                        <div className="text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '<span class="mr-2">&ndash;</span>') }} />
+                    </section>
+                ))}
 
                 <div className="grid grid-cols-2 gap-x-12">
                      {education && education.length > 0 && (
