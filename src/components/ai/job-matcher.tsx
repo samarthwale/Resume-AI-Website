@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -80,7 +81,7 @@ export default function JobMatcher({ currentSkills, onAddSkill }: JobMatcherProp
     <>
       <Button variant="outline" size="sm" onClick={() => setIsOpen(true)}>
         <Rocket className="mr-2 h-4 w-4" />
-        Tailor to Job Description
+        Tailor to Job
       </Button>
 
       <Dialog open={isOpen} onOpenChange={handleOpenChange}>

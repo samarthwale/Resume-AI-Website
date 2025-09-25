@@ -81,6 +81,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
     if (newSkill.trim() && setResumeData) {
       if (resumeData && resumeData.skills.some(s => s.toLowerCase() === newSkill.trim().toLowerCase())) {
          toast({
+            variant: "destructive",
             title: "Skill Exists",
             description: `"${newSkill.trim()}" is already in your skills list.`,
         });
@@ -96,7 +97,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
     setResumeData(prev => prev ? { ...prev, skills: prev.skills.filter(skill => skill !== skillToRemove) } : null);
     toast({
       title: `Skill Removed`,
-      description: `"${skillToRemove}" has been removed from your skills.`,
+      description: `"${skillToRemove}" has been removed from your skills list.`,
     });
   };
 
@@ -105,6 +106,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
 
     if (resumeData.skills.some(s => s.toLowerCase() === skillToAdd.trim().toLowerCase())) {
         toast({
+            variant: "destructive",
             title: "Skill Exists",
             description: `"${skillToAdd}" is already in your skills list.`,
         });
@@ -122,7 +124,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
       <header className="space-y-1">
         <div className="flex justify-between items-center flex-wrap gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-primary font-headline">ResumeFlow AI</h1>
+            <h1 className="text-3xl font-bold text-primary">ResumeFlow AI</h1>
             <p className="text-muted-foreground">Fill in your details below or import an existing resume.</p>
           </div>
           <ResumeImporter onImport={(data) => setResumeData(data)} />
@@ -150,11 +152,11 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="linkedin">LinkedIn Profile</Label>
-                  <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={handlePersonalInfoChange} />
+                  <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={handlePersonalInfoChange} placeholder="linkedin.com/in/yourprofile"/>
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label htmlFor="github">GitHub Profile</Label>
-                  <Input id="github" value={resumeData.personalInfo.github} onChange={handlePersonalInfoChange} />
+                  <Input id="github" value={resumeData.personalInfo.github} onChange={handlePersonalInfoChange} placeholder="github.com/yourusername"/>
                 </div>
               </div>
             </AccordionContent>
@@ -266,11 +268,9 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
             <AccordionContent className="px-6 space-y-4">
               <div className="flex flex-wrap gap-2">
                 {resumeData.skills.map(skill => (
-                  <Badge key={skill} variant="secondary" className="text-base">
+                  <Badge key={skill} variant="secondary" className="cursor-pointer group hover:bg-destructive/10" onClick={() => handleRemoveSkill(skill)}>
                     {skill}
-                    <button onClick={() => handleRemoveSkill(skill)} className="ml-2 text-primary hover:text-destructive">
-                      <Trash2 className="h-3 w-3" />
-                    </button>
+                    <Trash2 className="ml-2 h-3 w-3 text-destructive/60 group-hover:text-destructive" />
                   </Badge>
                 ))}
               </div>
@@ -305,7 +305,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                       </div>
                        <div className="space-y-2">
                         <Label htmlFor={`url-proj-${proj.id}`}>Project URL</Label>
-                        <Input id={`url-proj-${proj.id}`} value={proj.url} onChange={(e) => handleDynamicChange('projects', proj.id, 'url', e.target.value)} />
+                        <Input id={`url-proj-${proj.id}`} value={proj.url} onChange={(e) => handleDynamicChange('projects', proj.id, 'url', e.target.value)} placeholder="your-project.com" />
                       </div>
                     <div className="space-y-2">
                       <Label htmlFor={`description-proj-${proj.id}`}>Description</Label>
