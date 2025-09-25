@@ -15,9 +15,8 @@ const Section: React.FC<{ title: string; children: React.ReactNode; className?: 
 
 const formatDate = (dateString: string) => {
   if (!dateString || dateString.toLowerCase() === 'present') return "Present";
-  const [year, month] = dateString.split('-');
-  const date = new Date(Number(year), Number(month) - 1);
-  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  const [year] = dateString.split('-');
+  return year;
 };
 
 

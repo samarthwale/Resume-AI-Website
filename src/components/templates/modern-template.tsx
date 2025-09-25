@@ -4,9 +4,8 @@ import { Mail, Phone, Linkedin, Github, Globe } from "lucide-react";
 
 const formatDate = (dateString: string) => {
     if (!dateString || dateString.toLowerCase() === 'present') return "Present";
-    const [year, month] = dateString.split('-');
-    const date = new Date(Number(year), Number(month) - 1);
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const [year] = dateString.split('-');
+    return year;
 };
 
 export default function ModernTemplate({ data }: { data: ResumeData }) {
