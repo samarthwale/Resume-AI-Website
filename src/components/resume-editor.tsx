@@ -21,7 +21,7 @@ const initialResumeData: ResumeData = {
     "A brief professional summary about yourself. You can also use our AI Summary Generator to create one for you!",
   experience: [],
   education: [],
-  skills: ["React", "TypeScript", "Node.js", "Tailwind CSS", "Firebase"],
+  skills: "React, TypeScript, Node.js, Tailwind CSS, Firebase",
   projects: [],
   customSections: [],
 };

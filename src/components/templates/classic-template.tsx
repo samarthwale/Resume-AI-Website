@@ -18,6 +18,7 @@ const Section: React.FC<{ title: string; children: React.ReactNode; className?: 
 
 export default function ClassicTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
+    const skillsList = skills.split(',').map(s => s.trim()).filter(Boolean);
 
     return (
         <div className="p-8 bg-white text-gray-800 w-[794px] min-h-[1123px] font-times">
@@ -91,10 +92,10 @@ export default function ClassicTemplate({ data }: { data: ResumeData }) {
                   </Section>
                 )}
 
-                {skills && skills.length > 0 && (
+                {skillsList.length > 0 && (
                   <Section title="Skills">
                       <p className="text-[0.9em] leading-relaxed">
-                          {skills.join(', ')}
+                          {skillsList.join(', ')}
                       </p>
                   </Section>
                 )}

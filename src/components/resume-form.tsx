@@ -11,8 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Trash2, PlusCircle } from "lucide-react";
 import SummaryGenerator from "@/components/ai/summary-generator";
 import DescriptionRewriter from "@/components/ai/description-rewriter";
-import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
 import ResumeImporter from "@/components/ai/resume-importer";
 import JobMatcher from "@/components/ai/job-matcher";
 import { useToast } from "@/hooks/use-toast";
@@ -23,7 +21,6 @@ interface ResumeFormProps {
 }
 
 export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProps) {
-  const [newSkill, setNewSkill] = useState("");
   const { toast } = useToast();
 
   const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +32,11 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
   const handleSummaryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (!setResumeData) return;
     setResumeData(prev => prev ? { ...prev, summary: e.target.value } : null);
+  };
+
+  const handleSkillsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!setResumeData) return;
+    setResumeData(prev => prev ? { ...prev, skills: e.target.value } : null);
   };
 
   const handleDynamicChange = <T extends Experience | Education | Project | CustomSection>(
@@ -77,44 +79,28 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
     });
   };
 
-  const handleAddSkill = () => {
-    if (newSkill.trim() && setResumeData) {
-      if (resumeData && resumeData.skills.some(s => s.toLowerCase() === newSkill.trim().toLowerCase())) {
-         toast({
-            variant: "destructive",
-            title: "Skill Exists",
-            description: `"${newSkill.trim()}" is already in your skills list.`,
-        });
-        return;
-      }
-      setResumeData(prev => prev ? { ...prev, skills: [...prev.skills, newSkill.trim()] } : null);
-      setNewSkill("");
-    }
-  };
+  const addSkillsFromMatcher = (skillsToAdd: string[]) => {
+    if (!setResumeData || !resumeData) return;
 
-  const handleRemoveSkill = (skillToRemove: string) => {
-    if (!setResumeData) return;
-    setResumeData(prev => prev ? { ...prev, skills: prev.skills.filter(skill => skill !== skillToRemove) } : null);
-    toast({
-      title: `Skill Removed`,
-      description: `"${skillToRemove}" has been removed from your skills list.`,
-    });
-  };
+    const currentSkills = resumeData.skills.split(',').map(s => s.trim()).filter(Boolean);
+    const newSkills = skillsToAdd.filter(skill => 
+        !currentSkills.some(s => s.toLowerCase() === skill.toLowerCase())
+    );
 
-  const addSkillFromMatcher = (skillToAdd: string): boolean => {
-    if (!skillToAdd.trim() || !setResumeData || !resumeData) return false;
-
-    if (resumeData.skills.some(s => s.toLowerCase() === skillToAdd.trim().toLowerCase())) {
+    if (newSkills.length > 0) {
+        const updatedSkills = [...currentSkills, ...newSkills].join(', ');
+        setResumeData(prev => prev ? { ...prev, skills: updatedSkills } : null);
         toast({
-            variant: "destructive",
-            title: "Skill Exists",
-            description: `"${skillToAdd}" is already in your skills list.`,
+            title: "Skills Added",
+            description: `Added: ${newSkills.join(', ')}`
         });
-        return false;
+    } else {
+        toast({
+            variant: "default",
+            title: "No new skills to add.",
+            description: "The suggested skills are already in your list.",
+        });
     }
-
-    setResumeData(prev => prev ? { ...prev, skills: [...prev.skills, skillToAdd.trim()] } : null);
-    return true;
   };
   
   if (!resumeData) return null;
@@ -173,7 +159,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                 <SummaryGenerator
                   currentSummary={resumeData.summary}
                   onSummaryGenerated={(summary) => setResumeData(prev => prev ? { ...prev, summary } : null)}
-                  userInfo={{name: resumeData.personalInfo.name, skills: resumeData.skills.join(', ')}}
+                  userInfo={{name: resumeData.personalInfo.name, skills: resumeData.skills}}
                 />
               </div>
             </AccordionContent>
@@ -266,24 +252,24 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
           <Card>
             <AccordionTrigger className="p-6 text-lg font-semibold">Skills</AccordionTrigger>
             <AccordionContent className="px-6 space-y-4">
-              <div className="flex flex-wrap gap-2">
-                {resumeData.skills.map(skill => (
-                  <Badge key={skill} variant="secondary" className="cursor-pointer group hover:bg-destructive/10" onClick={() => handleRemoveSkill(skill)}>
-                    {skill}
-                    <Trash2 className="ml-2 h-3 w-3 text-destructive/60 group-hover:text-destructive" />
-                  </Badge>
-                ))}
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t items-center">
-                  <div className="flex-grow flex gap-2 w-full">
-                      <Input placeholder="Add skill manually" value={newSkill} onChange={e => setNewSkill(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleAddSkill()} />
-                      <Button onClick={handleAddSkill} className="shrink-0"><PlusCircle className="mr-2 h-4 w-4" /> Add</Button>
-                  </div>
-                  <span className="text-sm text-muted-foreground hidden sm:inline">OR</span>
-                   <div className="shrink-0">
-                     <JobMatcher currentSkills={resumeData.skills} onAddSkill={addSkillFromMatcher} />
-                  </div>
-              </div>
+                <div className="space-y-2">
+                    <Label htmlFor="skills">Skills</Label>
+                    <Textarea 
+                        id="skills" 
+                        placeholder="e.g. React, TypeScript, Node.js" 
+                        value={resumeData.skills} 
+                        onChange={handleSkillsChange}
+                        rows={4}
+                    />
+                    <p className="text-xs text-muted-foreground">Enter skills separated by commas.</p>
+                </div>
+                <div className="flex items-center gap-4 pt-4 border-t">
+                    <p className="text-sm text-muted-foreground">Or get suggestions based on a job description:</p>
+                    <JobMatcher 
+                        currentSkills={resumeData.skills.split(',').map(s => s.trim()).filter(Boolean)} 
+                        onAddSkills={addSkillsFromMatcher} 
+                    />
+                </div>
             </AccordionContent>
           </Card>
         </AccordionItem>

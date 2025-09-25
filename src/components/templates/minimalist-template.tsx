@@ -9,6 +9,7 @@ const formatDate = (dateString: string) => {
 
 export default function MinimalistTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
+    const skillsList = skills.split(',').map(s => s.trim()).filter(Boolean);
     
     const contactInfo = [
         personalInfo.email,
@@ -98,11 +99,11 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
                       </section>
                      )}
 
-                    {skills && skills.length > 0 && (
+                    {skillsList.length > 0 && (
                       <section>
                           <h2 className="text-[0.875em] font-bold uppercase tracking-widest text-gray-500 mb-4">Skills</h2>
                           <p className="text-[0.875em] text-gray-700 leading-relaxed">
-                              {skills.join(' • ')}
+                              {skillsList.join(' • ')}
                           </p>
                       </section>
                     )}

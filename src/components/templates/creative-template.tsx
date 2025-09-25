@@ -24,6 +24,7 @@ const TimelineItem: React.FC<{ icon: React.ReactNode; children: React.ReactNode 
 
 export default function CreativeTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
+    const skillsList = skills.split(',').map(s => s.trim()).filter(Boolean);
 
     return (
         <div className="p-8 bg-slate-50 text-slate-800 w-[794px] min-h-[1123px]">
@@ -63,11 +64,11 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                            {personalInfo.github && personalInfo.github.trim() && <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Github size={14} /><span>{personalInfo.github}</span></a>}
                         </div>
                     </section>
-                    {skills && skills.length > 0 && (
+                    {skillsList.length > 0 && (
                       <section>
                           <h2 className="text-[1.25em] font-bold text-primary mb-4">Skills</h2>
                           <div className="flex flex-wrap gap-2">
-                              {skills.map(skill => (
+                              {skillsList.map(skill => (
                                   <span key={skill} className="bg-primary/10 text-primary-800 text-[0.75em] font-semibold px-3 py-1 rounded-md">{skill}</span>
                               ))}
                           </div>

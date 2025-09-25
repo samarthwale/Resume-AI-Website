@@ -14,10 +14,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 interface JobMatcherProps {
   currentSkills: string[];
-  onAddSkill: (skill: string) => boolean;
+  onAddSkills: (skills: string[]) => void;
 }
 
-export default function JobMatcher({ currentSkills, onAddSkill }: JobMatcherProps) {
+export default function JobMatcher({ currentSkills, onAddSkills }: JobMatcherProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
@@ -58,16 +58,6 @@ export default function JobMatcher({ currentSkills, onAddSkill }: JobMatcherProp
       setIsLoading(false);
     }
   };
-
-  const handleAddSkill = (skill: string) => {
-    const wasAdded = onAddSkill(skill);
-    if (wasAdded) {
-      toast({
-          title: `Skill Added`,
-          description: `"${skill}" has been added to your skills list.`,
-      });
-    }
-  };
   
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
@@ -81,7 +71,7 @@ export default function JobMatcher({ currentSkills, onAddSkill }: JobMatcherProp
     <>
       <Button variant="outline" size="sm" onClick={() => setIsOpen(true)}>
         <Rocket className="mr-2 h-4 w-4" />
-        Tailor to Job
+        Get Skill Suggestions
       </Button>
 
       <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -126,15 +116,21 @@ export default function JobMatcher({ currentSkills, onAddSkill }: JobMatcherProp
                                 </div>
                             </div>
                             <div>
-                                <h4 className="font-semibold mb-2">Suggested Skills</h4>
-                                <p className="text-sm text-muted-foreground mb-2">Consider adding these skills from the job description if they apply to you.</p>
+                                <h4 className="font-semibold mb-2">Suggested Skills to Add</h4>
+                                <p className="text-sm text-muted-foreground mb-2">Click the button below to add all these relevant skills to your resume.</p>
                                 <div className="flex flex-wrap gap-2">
                                     {results.suggestedSkills.length > 0 ? results.suggestedSkills.map(skill => (
-                                        <Badge key={skill} variant="outline" className="cursor-pointer hover:bg-accent" onClick={() => handleAddSkill(skill)}>
-                                            <PlusCircle className="mr-2 h-3 w-3" /> {skill}
+                                        <Badge key={skill} variant="outline">
+                                            {skill}
                                         </Badge>
                                     )) : <p className="text-sm text-muted-foreground">No new skills suggested.</p>}
                                 </div>
+                                {results.suggestedSkills.length > 0 && (
+                                    <Button size="sm" className="mt-4" onClick={() => onAddSkills(results.suggestedSkills)}>
+                                        <PlusCircle className="mr-2 h-4 w-4" />
+                                        Add Suggested Skills
+                                    </Button>
+                                )}
                             </div>
                             <div>
                                 <h4 className="font-semibold mb-2">Keywords to Include</h4>

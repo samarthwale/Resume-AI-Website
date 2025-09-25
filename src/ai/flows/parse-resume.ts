@@ -54,7 +54,7 @@ const ParseResumeOutputSchema = z.object({
   summary: z.string().describe('A professional summary.'),
   experience: z.array(ExperienceSchema).describe('A list of work experiences.'),
   education: z.array(EducationSchema).describe('A list of educational qualifications.'),
-  skills: z.array(z.string()).describe('A list of skills.'),
+  skills: z.string().describe('A comma-separated string of skills.'),
   projects: z.array(ProjectSchema).describe('A list of projects.'),
   customSections: z.array(CustomSectionSchema).describe('A list of custom sections. Do not parse content into this field, return an empty array.'),
 });
@@ -80,6 +80,7 @@ const prompt = ai.definePrompt({
 - For all dates, use the 'YYYY-MM' format. If only a year is provided, use 'YYYY-01'.
 - For experience descriptions, maintain the original content but ensure each distinct point or sentence starts on a new line with a '• ' bullet point.
 - For LinkedIn and GitHub, extract just the username or profile identifier, not the full URL (e.g., 'yourprofile' from 'linkedin.com/in/yourprofile').
+- For skills, extract them as a single comma-separated string (e.g., "React, TypeScript, Node.js").
 - If a section (like projects or custom sections) is not present, return an empty array for it. For custom sections, always return an empty array for now.
 
 Resume File: {{media url=resumeFile}}`,

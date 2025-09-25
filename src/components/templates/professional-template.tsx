@@ -22,6 +22,7 @@ const formatDate = (dateString: string) => {
 
 export default function ProfessionalTemplate({ data }: TemplateProps) {
   const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
+  const skillsList = skills.split(',').map(s => s.trim()).filter(Boolean);
 
   return (
     <div className="p-8 bg-white text-gray-800 w-[794px] min-h-[1123px]">
@@ -95,10 +96,10 @@ export default function ProfessionalTemplate({ data }: TemplateProps) {
           </Section>
         )}
         
-        {skills && skills.length > 0 && (
+        {skillsList.length > 0 && (
           <Section title="Skills">
             <div className="flex flex-wrap gap-2">
-              {skills.map(skill => (
+              {skillsList.map(skill => (
                 <span key={skill} className="bg-primary/10 text-primary text-[0.75em] font-medium px-2.5 py-1 rounded-full">{skill}</span>
               ))}
             </div>

@@ -10,7 +10,7 @@ export interface ResumeData {
   summary: string;
   experience: Experience[];
   education: Education[];
-  skills: string[];
+  skills: string;
   projects: Project[];
   customSections: CustomSection[];
 }

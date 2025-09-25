@@ -10,6 +10,7 @@ const formatDate = (dateString: string) => {
 
 export default function ModernTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
+    const skillsList = skills.split(',').map(s => s.trim()).filter(Boolean);
 
     return (
         <div className="bg-white text-gray-800 flex w-[794px] min-h-[1123px]">
@@ -27,11 +28,11 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
                     </div>
                 </section>
 
-                {skills && skills.length > 0 && (
+                {skillsList.length > 0 && (
                   <section className="mt-8">
                       <h2 className="text-[1.125em] font-semibold text-primary uppercase tracking-wider mb-3">Skills</h2>
                       <div className="flex flex-wrap gap-2">
-                          {skills.map(skill => (
+                          {skillsList.map(skill => (
                               <span key={skill} className="bg-gray-700 text-white text-[0.75em] font-medium px-3 py-1 rounded-md">{skill}</span>
                           ))}
                       </div>
