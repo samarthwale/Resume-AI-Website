@@ -15,12 +15,12 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
         personalInfo.phone,
         personalInfo.linkedin,
         personalInfo.github,
-    ].filter(Boolean);
+    ].filter(Boolean).filter(s => s.trim() !== '');
 
     return (
-        <div className="p-10 font-body bg-white text-gray-900 w-[794px] min-h-[1123px]">
+        <div className="p-10 bg-white text-gray-900 w-[794px] min-h-[1123px]">
             <header className="mb-10 text-center">
-                <h1 className="text-[2.25em] font-bold tracking-tight font-headline">{personalInfo.name}</h1>
+                <h1 className="text-[2.25em] font-bold tracking-tight">{personalInfo.name}</h1>
                  {contactInfo.length > 0 && (
                     <p className="mt-2 text-[0.875em] text-gray-500">
                         {contactInfo.join(' | ')}
@@ -64,7 +64,7 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
                               <div key={proj.id}>
                                   <div className="flex justify-between items-start">
                                       <h3 className="text-[1em] font-semibold">{proj.name}</h3>
-                                       {proj.url && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-[0.75em] text-primary hover:underline shrink-0 ml-4">
+                                       {proj.url && proj.url.trim() && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-[0.75em] text-primary hover:underline shrink-0 ml-4">
                                           View Project
                                        </a>}
                                   </div>

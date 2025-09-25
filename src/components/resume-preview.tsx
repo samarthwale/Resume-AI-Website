@@ -33,6 +33,7 @@ import html2canvas from "html2canvas";
 import { ThemeToggle } from "./theme-toggle";
 import FontSizer from "./font-sizer";
 import Image from "next/image";
+import FontSelector from "./font-selector";
 
 interface ResumePreviewProps {
   resumeData: ResumeData;
@@ -42,6 +43,8 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
   const [template, setTemplate] = useState("professional");
   const [isGenerating, setIsGenerating] = useState(false);
   const [fontSize, setFontSize] = useState(14);
+  const [fontFamily, setFontFamily] = useState("Inter, sans-serif");
+  const [isBold, setIsBold] = useState(false);
   const { toast } = useToast();
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -188,6 +191,12 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
               </div>
               <ThemeCustomizer />
               <FontSizer onSizeChange={setFontSize} defaultValue={fontSize} />
+              <FontSelector 
+                onFontChange={setFontFamily}
+                onBoldChange={setIsBold}
+                defaultFont={fontFamily}
+                defaultBold={isBold}
+              />
               <ThemeToggle />
             </div>
             <div className="flex items-center gap-2">
@@ -204,7 +213,12 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
         </Card>
         
         <div className="flex-grow overflow-auto flex justify-center py-4 print-container">
-            <div id="resume-preview" className="bg-white shadow-lg rounded-lg" style={{ fontSize: `${fontSize}px`, width: '794px' }}>
+            <div id="resume-preview" className="bg-white shadow-lg rounded-lg" style={{ 
+                fontSize: `${fontSize}px`, 
+                fontFamily: fontFamily,
+                fontWeight: isBold ? 'bold' : 'normal',
+                width: '794px' 
+            }}>
                 {renderTemplate()}
             </div>
         </div>

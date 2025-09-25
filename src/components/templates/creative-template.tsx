@@ -26,7 +26,7 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
 
     return (
-        <div className="p-8 font-body bg-slate-50 text-slate-800 w-[794px] min-h-[1123px]">
+        <div className="p-8 bg-slate-50 text-slate-800 w-[794px] min-h-[1123px]">
             <header className="grid grid-cols-3 gap-8 items-center mb-8">
                 <div className="col-span-1">
                     <div className="w-32 h-32 rounded-full overflow-hidden mx-auto bg-slate-200">
@@ -41,7 +41,7 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                     </div>
                 </div>
                 <div className="col-span-2 text-right">
-                    <h1 className="text-[3em] font-extrabold text-primary font-headline">{personalInfo.name}</h1>
+                    <h1 className="text-[3em] font-extrabold text-primary">{personalInfo.name}</h1>
                     {summary && <>
                       <p className="text-[1.25em] text-slate-500 mt-1">Professional Summary</p>
                       <p className="text-[0.875em] mt-4 text-slate-600">{summary}</p>
@@ -59,8 +59,8 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                         <div className="text-[0.875em] space-y-2 text-slate-700">
                            {personalInfo.email && <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-2 hover:text-primary transition-colors"><Mail size={14} /><span>{personalInfo.email}</span></a>}
                            {personalInfo.phone && <a href={`tel:${personalInfo.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors"><Phone size={14} /><span>{personalInfo.phone}</span></a>}
-                           {personalInfo.linkedin && <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Linkedin size={14} /><span>{personalInfo.linkedin}</span></a>}
-                           {personalInfo.github && <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Github size={14} /><span>{personalInfo.github}</span></a>}
+                           {personalInfo.linkedin && personalInfo.linkedin.trim() && <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Linkedin size={14} /><span>{personalInfo.linkedin}</span></a>}
+                           {personalInfo.github && personalInfo.github.trim() && <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Github size={14} /><span>{personalInfo.github}</span></a>}
                         </div>
                     </section>
                     {skills && skills.length > 0 && (
@@ -81,7 +81,7 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                               <div key={proj.id}>
                                   <div className="flex items-center gap-2">
                                       <h3 className="font-semibold text-[1em] text-slate-800">{proj.name}</h3>
-                                      {proj.url && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                      {proj.url && proj.url.trim() && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                                           <Globe size={14} />
                                       </a>}
                                   </div>
@@ -97,7 +97,7 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                 <div className="col-span-2">
                     {experience && experience.length > 0 && (
                       <section>
-                           <h2 className="text-[1.5em] font-bold text-primary mb-6 font-headline">Career Timeline</h2>
+                           <h2 className="text-[1.5em] font-bold text-primary mb-6">Career Timeline</h2>
                            {experience.map(exp => (
                               <TimelineItem key={exp.id} icon={<Briefcase size={20} />}>
                                    <p className="text-[0.75em] text-slate-500 -mt-8 mb-2">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
@@ -110,7 +110,7 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                     )}
                     {education && education.length > 0 && (
                       <section className="mt-8">
-                           <h2 className="text-[1.5em] font-bold text-primary mb-6 font-headline">Education</h2>
+                           <h2 className="text-[1.5em] font-bold text-primary mb-6">Education</h2>
                            {education.map(edu => (
                               <TimelineItem key={edu.id} icon={<GraduationCap size={20} />}>
                                    <p className="text-[0.75em] text-slate-500 -mt-8 mb-2">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
@@ -122,7 +122,7 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                     )}
                      {customSections && customSections.length > 0 && customSections.map(section => (
                         <section key={section.id} className="mt-8">
-                           <h2 className="text-[1.5em] font-bold text-primary mb-6 font-headline">{section.title}</h2>
+                           <h2 className="text-[1.5em] font-bold text-primary mb-6">{section.title}</h2>
                            <TimelineItem icon={<FolderKanban size={20} />}>
                                 <div className="mt-2 text-[0.875em] text-slate-700 whitespace-pre-line -mt-8" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
                            </TimelineItem>

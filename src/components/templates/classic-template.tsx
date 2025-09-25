@@ -20,14 +20,14 @@ export default function ClassicTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
 
     return (
-        <div className="p-8 font-serif bg-white text-gray-800 w-[794px] min-h-[1123px]">
+        <div className="p-8 bg-white text-gray-800 w-[794px] min-h-[1123px] font-times">
             <header className="text-center mb-8">
                 <h1 className="text-[2.5em] font-bold tracking-wider">{personalInfo.name}</h1>
                 <div className="flex justify-center items-center flex-wrap gap-x-4 gap-y-1 text-[0.85em] mt-2 text-gray-600">
                     {personalInfo.phone && <span>{personalInfo.phone}</span>}
                     {personalInfo.email && <span>{personalInfo.email}</span>}
-                    {personalInfo.linkedin && <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-primary">{personalInfo.linkedin}</a>}
-                    {personalInfo.github && <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="hover:text-primary">{personalInfo.github}</a>}
+                    {personalInfo.linkedin && personalInfo.linkedin.trim() && <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-primary">{personalInfo.linkedin}</a>}
+                    {personalInfo.github && personalInfo.github.trim() && <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="hover:text-primary">{personalInfo.github}</a>}
                 </div>
             </header>
 
@@ -82,7 +82,7 @@ export default function ClassicTemplate({ data }: { data: ResumeData }) {
                         <div key={proj.id}>
                            <h3 className="text-[1em] font-bold">{proj.name}</h3>
                            <p className="mt-1 text-[0.9em]">{proj.description}</p>
-                           {proj.url && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-[0.9em] text-primary hover:underline">
+                           {proj.url && proj.url.trim() && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-[0.9em] text-primary hover:underline">
                               {proj.url}
                            </a>}
                         </div>

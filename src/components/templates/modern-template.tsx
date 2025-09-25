@@ -12,18 +12,18 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
     const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
 
     return (
-        <div className="font-body bg-white text-gray-800 flex w-[794px] min-h-[1123px]">
+        <div className="bg-white text-gray-800 flex w-[794px] min-h-[1123px]">
             {/* Left Sidebar */}
             <aside className="w-1/3 bg-gray-800 text-white p-8">
-                <h1 className="text-[1.875em] font-bold text-white mb-2 font-headline">{personalInfo.name}</h1>
+                <h1 className="text-[1.875em] font-bold text-white mb-2">{personalInfo.name}</h1>
                 
                 <section className="mt-8">
                     <h2 className="text-[1.125em] font-semibold text-primary uppercase tracking-wider mb-3">Contact</h2>
                     <div className="text-[0.875em] space-y-2 text-gray-300">
                         {personalInfo.email && <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-2 hover:text-primary transition-colors"><Mail size={14} /><span>{personalInfo.email}</span></a>}
                         {personalInfo.phone && <a href={`tel:${personalInfo.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors"><Phone size={14} /><span>{personalInfo.phone}</span></a>}
-                        {personalInfo.linkedin && <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Linkedin size={14} /><span>LinkedIn</span></a>}
-                        {personalInfo.github && <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Github size={14} /><span>GitHub</span></a>}
+                        {personalInfo.linkedin && personalInfo.linkedin.trim() && <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Linkedin size={14} /><span>LinkedIn</span></a>}
+                        {personalInfo.github && personalInfo.github.trim() && <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors"><Github size={14} /><span>GitHub</span></a>}
                     </div>
                 </section>
 
@@ -58,14 +58,14 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
             <main className="w-2/3 p-8">
                 {summary && (
                   <section className="mb-8">
-                      <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">Summary</h2>
+                      <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4">Summary</h2>
                       <p className="text-[0.875em] text-gray-700">{summary}</p>
                   </section>
                 )}
                 
                 {experience && experience.length > 0 && (
                   <section className="mb-8">
-                      <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">Experience</h2>
+                      <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4">Experience</h2>
                       <div className="space-y-5">
                           {experience.map(exp => (
                               <div key={exp.id}>
@@ -83,13 +83,13 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
 
                 {projects && projects.length > 0 && (
                   <section>
-                      <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">Projects</h2>
+                      <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4">Projects</h2>
                       <div className="space-y-4">
                           {projects.map(proj => (
                               <div key={proj.id}>
                                   <div className="flex items-center gap-2">
                                       <h3 className="font-semibold text-[1.125em] text-gray-900">{proj.name}</h3>
-                                      {proj.url && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                      {proj.url && proj.url.trim() && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                                           <Globe size={16} />
                                       </a>}
                                   </div>
@@ -102,7 +102,7 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
                 
                 {customSections && customSections.length > 0 && customSections.map(section => (
                     <section key={section.id} className="mt-8">
-                        <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4 font-headline">{section.title}</h2>
+                        <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4">{section.title}</h2>
                         <div className="mt-2 text-[0.875em] text-gray-600 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
                     </section>
                 ))}

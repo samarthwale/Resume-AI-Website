@@ -8,7 +8,7 @@ interface TemplateProps {
 
 const Section: React.FC<{ title: string; children: React.ReactNode; className?: string }> = ({ title, children, className }) => (
   <section className={`mb-6 ${className}`}>
-    <h2 className="text-[1.25em] font-bold text-primary mb-3 pb-1.5 border-b-2 border-primary/30 font-headline">{title}</h2>
+    <h2 className="text-[1.25em] font-bold text-primary mb-3 pb-1.5 border-b-2 border-primary/30">{title}</h2>
     <div className="text-[0.875em] text-gray-700">{children}</div>
   </section>
 );
@@ -24,14 +24,14 @@ export default function ProfessionalTemplate({ data }: TemplateProps) {
   const { personalInfo, summary, experience, education, skills, projects, customSections } = data;
 
   return (
-    <div className="p-8 font-body bg-white text-gray-800 w-[794px] min-h-[1123px]">
+    <div className="p-8 bg-white text-gray-800 w-[794px] min-h-[1123px]">
       <header className="text-center mb-8">
-        <h1 className="text-[2.25em] font-bold text-primary font-headline">{personalInfo.name}</h1>
+        <h1 className="text-[2.25em] font-bold text-primary">{personalInfo.name}</h1>
         <div className="flex justify-center items-center flex-wrap gap-x-4 gap-y-2 text-[0.75em] mt-2 text-gray-600">
           {personalInfo.email && <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-1.5 hover:text-primary transition-colors"><Mail size={12} />{personalInfo.email}</a>}
           {personalInfo.phone && <a href={`tel:${personalInfo.phone}`} className="flex items-center gap-1.5 hover:text-primary transition-colors"><Phone size={12} />{personalInfo.phone}</a>}
-          {personalInfo.linkedin && <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors"><Linkedin size={12} />{personalInfo.linkedin}</a>}
-          {personalInfo.github && <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors"><Github size={12} />{personalInfo.github}</a>}
+          {personalInfo.linkedin && personalInfo.linkedin.trim() && <a href={`https://` + personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors"><Linkedin size={12} />{personalInfo.linkedin}</a>}
+          {personalInfo.github && personalInfo.github.trim() && <a href={`https://` + personalInfo.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors"><Github size={12} />{personalInfo.github}</a>}
         </div>
       </header>
       
@@ -63,7 +63,7 @@ export default function ProfessionalTemplate({ data }: TemplateProps) {
               <div key={proj.id}>
                 <div className="flex items-center gap-2">
                    <h3 className="font-semibold text-[1em] text-gray-800">{proj.name}</h3>
-                   {proj.url && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                   {proj.url && proj.url.trim() && <a href={`https://` + proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                       <Globe size={14} />
                    </a>}
                 </div>
