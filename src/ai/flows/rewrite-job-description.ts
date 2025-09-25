@@ -1,3 +1,4 @@
+
 // This file is machine-generated - edit with care!
 'use server';
 
@@ -40,7 +41,7 @@ const prompt = ai.definePrompt({
   name: 'rewriteJobDescriptionPrompt',
   input: {schema: RewriteJobDescriptionInputSchema},
   output: {schema: RewriteJobDescriptionOutputSchema},
-  prompt: `Rewrite the following description to be more impactful, professional, and concise. Format the response as a list of bullet points, with each point starting with a '•' character. Use strong action verbs and quantify achievements where possible:
+  prompt: `Rewrite the following description to be more impactful, professional, and concise. Format the response as a list of bullet points, with each point starting with a '-' character. Use strong action verbs and quantify achievements where possible:
 
 {{jobDescription}}`,
 });

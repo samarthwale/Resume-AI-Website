@@ -75,7 +75,7 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
                                       <p className="text-[0.875em] text-gray-500">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
                                   </div>
                                   <p className="text-[1em] font-medium text-primary italic">{exp.company}</p>
-                                  <div className="mt-2 text-[0.875em] text-gray-600 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
+                                  <div className="mt-2 text-[0.875em] text-gray-600 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/^/gm, '<span class="text-primary mr-2">&#8227;</span>') }} />
                               </div>
                           ))}
                       </div>
@@ -104,7 +104,7 @@ export default function ModernTemplate({ data }: { data: ResumeData }) {
                 {customSections && customSections.length > 0 && customSections.map(section => (
                     <section key={section.id} className="mt-8">
                         <h2 className="text-[1.5em] font-bold text-primary border-b-2 border-primary/30 pb-2 mb-4">{section.title}</h2>
-                        <div className="mt-2 text-[0.875em] text-gray-600 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
+                        <div className="mt-2 text-[0.875em] text-gray-600 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/^/gm, '<span class="text-primary mr-2">&#8227;</span>') }} />
                     </section>
                 ))}
             </main>

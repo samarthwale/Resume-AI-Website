@@ -50,7 +50,7 @@ export default function ProfessionalTemplate({ data }: TemplateProps) {
                   <p className="text-[0.75em] text-gray-500">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
                 </div>
                 <p className="text-[0.875em] font-medium text-gray-600 italic">{exp.company}</p>
-                <div className="mt-1.5 text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="text-primary mr-2">•</span>') }} />
+                <div className="mt-1.5 text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/^/gm, '<span class="text-primary mr-2">-</span>') }} />
               </div>
             ))}
           </div>
@@ -77,7 +77,7 @@ export default function ProfessionalTemplate({ data }: TemplateProps) {
 
       {customSections && customSections.length > 0 && customSections.map(section => (
         <Section key={section.id} title={section.title}>
-          <div className="mt-1.5 text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '<span class="text-primary mr-2">•</span>') }} />
+          <div className="mt-1.5 text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/^/gm, '<span class="text-primary mr-2">-</span>') }} />
         </Section>
       ))}
       
@@ -98,11 +98,9 @@ export default function ProfessionalTemplate({ data }: TemplateProps) {
         
         {skillsList.length > 0 && (
           <Section title="Skills">
-            <div className="flex flex-wrap gap-2">
-              {skillsList.map(skill => (
-                <span key={skill} className="bg-primary/10 text-primary text-[0.75em] font-medium px-2.5 py-1 rounded-full">{skill}</span>
-              ))}
-            </div>
+            <p className="text-[0.875em] leading-relaxed">
+              {skillsList.join(', ')}
+            </p>
           </Section>
         )}
       </div>

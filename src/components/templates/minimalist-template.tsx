@@ -50,7 +50,7 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
                                       </div>
                                       <p className="text-[0.75em] text-gray-500 text-right shrink-0 ml-4">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
                                   </div>
-                                  <div className="mt-1.5 text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="mr-2">&ndash;</span>') }} />
+                                  <div className="mt-1.5 text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/^/gm, '<span class="mr-2">&ndash;</span>') }} />
                               </div>
                           ))}
                       </div>
@@ -79,7 +79,7 @@ export default function MinimalistTemplate({ data }: { data: ResumeData }) {
                 {customSections && customSections.length > 0 && customSections.map(section => (
                     <section key={section.id} className="mb-8">
                         <h2 className="text-[0.875em] font-bold uppercase tracking-widest text-gray-500 mb-4">{section.title}</h2>
-                        <div className="text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '<span class="mr-2">&ndash;</span>') }} />
+                        <div className="text-[0.875em] text-gray-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/^/gm, '<span class="mr-2">&ndash;</span>') }} />
                     </section>
                 ))}
 

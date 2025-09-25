@@ -69,7 +69,7 @@ export default function ClassicTemplate({ data }: { data: ResumeData }) {
                                       </div>
                                       <p className="text-[0.9em] text-gray-600 shrink-0 ml-4">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
                                   </div>
-                                  <div className="mt-1.5 text-[0.9em] whitespace-pre-line pl-4" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '- ') }} />
+                                  <div className="mt-1.5 text-[0.9em] whitespace-pre-line pl-4" dangerouslySetInnerHTML={{ __html: exp.description }} />
                               </div>
                           ))}
                       </div>
@@ -102,7 +102,7 @@ export default function ClassicTemplate({ data }: { data: ResumeData }) {
 
                 {customSections && customSections.length > 0 && customSections.map(section => (
                     <Section key={section.id} title={section.title}>
-                        <div className="mt-1.5 text-[0.9em] whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '- ') }} />
+                        <div className="mt-1.5 text-[0.9em] whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.description }} />
                     </Section>
                 ))}
             </main>

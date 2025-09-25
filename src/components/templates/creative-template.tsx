@@ -104,7 +104,7 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                                    <p className="text-[0.75em] text-slate-500 -mt-8 mb-2">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
                                   <h3 className="font-bold text-[1.125em] text-slate-900">{exp.jobTitle}</h3>
                                   <p className="text-[1em] font-medium text-slate-600 italic">{exp.company}</p>
-                                  <div className="mt-2 text-[0.875em] text-slate-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
+                                  <div className="mt-2 text-[0.875em] text-slate-700 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: exp.description.replace(/^/gm, '<span class="text-primary mr-2">&#8227;</span>') }} />
                               </TimelineItem>
                            ))}
                       </section>
@@ -125,7 +125,7 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
                         <section key={section.id} className="mt-8">
                            <h2 className="text-[1.5em] font-bold text-primary mb-6">{section.title}</h2>
                            <TimelineItem icon={<FolderKanban size={20} />}>
-                                <div className="mt-2 text-[0.875em] text-slate-700 whitespace-pre-line -mt-8" dangerouslySetInnerHTML={{ __html: section.description.replace(/•/g, '<span class="text-primary mr-2">&#8227;</span>') }} />
+                                <div className="mt-2 text-[0.875em] text-slate-700 whitespace-pre-line -mt-8" dangerouslySetInnerHTML={{ __html: section.description.replace(/^/gm, '<span class="text-primary mr-2">&#8227;</span>') }} />
                            </TimelineItem>
                         </section>
                      ))}
