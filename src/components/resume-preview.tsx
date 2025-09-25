@@ -8,6 +8,7 @@ import ProfessionalTemplate from "./templates/professional-template";
 import ModernTemplate from "./templates/modern-template";
 import CreativeTemplate from "./templates/creative-template";
 import MinimalistTemplate from "./templates/minimalist-template";
+import ClassicTemplate from "./templates/classic-template";
 import { Button } from "./ui/button";
 import { Download, LayoutTemplate, Loader2, Eye } from "lucide-react";
 import {
@@ -90,49 +91,52 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
   };
 
   const handleDownload = async () => {
-    if (!previewImageUrl) {
-        toast({
-            variant: "destructive",
-            title: "Error",
-            description: "No preview available to download.",
-        });
-        return;
+    const resumeElement = document.getElementById("resume-preview")?.firstChild as HTMLElement;
+     if (!resumeElement) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Could not find the resume element to generate a PDF.",
+      });
+      return;
     }
 
     setIsGenerating(true);
     try {
+       const canvas = await html2canvas(resumeElement, {
+        scale: 3, // Higher scale for better quality
+        useCORS: true,
+        logging: false,
+        width: resumeElement.scrollWidth,
+        height: resumeElement.scrollHeight,
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'pt',
         format: 'a4',
       });
       
-      const img = new window.Image();
-      img.src = previewImageUrl;
-      img.onload = () => {
-        const a4Width = 595.28;
-        const a4Height = 841.89;
-        
-        const imgWidth = img.width;
-        const imgHeight = img.height;
-        
-        const ratio = imgWidth / imgHeight;
-        
-        let pdfCanvasHeight = a4Width / ratio;
-        let totalPages = Math.ceil(pdfCanvasHeight / a4Height);
-        
-        for (let i = 0; i < totalPages; i++) {
-            if (i > 0) {
-                pdf.addPage();
-            }
-            const yPosition = -(a4Height * i);
-            pdf.addImage(previewImageUrl, 'PNG', 0, yPosition, a4Width, pdfCanvasHeight);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+      const ratio = canvasWidth / canvasHeight;
+      
+      const scaledCanvasHeight = pdfWidth / ratio;
+      const totalPages = Math.ceil(scaledCanvasHeight / pdfHeight);
+
+      for (let i = 0; i < totalPages; i++) {
+        if (i > 0) {
+          pdf.addPage();
         }
-        
-        pdf.save(`${resumeData.personalInfo.name.replace(/ /g, '_')}_Resume.pdf`);
-        setIsPreviewOpen(false);
-        setPreviewImageUrl(null);
+        const yPosition = -pdfHeight * i;
+        pdf.addImage(imgData, 'PNG', 0, yPosition, pdfWidth, scaledCanvasHeight);
       }
+      
+      pdf.save(`${resumeData.personalInfo.name.replace(/ /g, '_')}_Resume.pdf`);
+      setIsPreviewOpen(false); // Close preview after download
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast({
@@ -153,6 +157,8 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
         return <CreativeTemplate data={resumeData} />;
       case "minimalist":
         return <MinimalistTemplate data={resumeData} />;
+      case "classic":
+        return <ClassicTemplate data={resumeData} />;
       case "professional":
       default:
         return <ProfessionalTemplate data={resumeData} />;
@@ -176,6 +182,7 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
                     <SelectItem value="modern">Modern</SelectItem>
                     <SelectItem value="creative">Creative</SelectItem>
                     <SelectItem value="minimalist">Minimalist</SelectItem>
+                    <SelectItem value="classic">Classic</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -185,7 +192,7 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
             </div>
             <div className="flex items-center gap-2">
               <Button onClick={handlePreviewClick} variant="outline" disabled={isGenerating}>
-                {isGenerating ? (
+                {isGenerating && !isPreviewOpen ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
                   <Eye className="mr-2 h-4 w-4" />
@@ -196,19 +203,14 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
           </CardContent>
         </Card>
         
-        <div className="flex-grow overflow-auto flex justify-center py-4">
-            <div id="resume-preview" className="bg-white shadow-lg rounded-lg" style={{ fontSize: `${fontSize}px` }}>
+        <div className="flex-grow overflow-auto flex justify-center py-4 print-container">
+            <div id="resume-preview" className="bg-white shadow-lg rounded-lg" style={{ fontSize: `${fontSize}px`, width: '794px' }}>
                 {renderTemplate()}
             </div>
         </div>
       </div>
 
-      <Dialog open={isPreviewOpen} onOpenChange={(open) => {
-        if (!open) {
-          setPreviewImageUrl(null);
-        }
-        setIsPreviewOpen(open);
-      }}>
+      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
         <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>PDF Preview</DialogTitle>
@@ -217,7 +219,11 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
             </DialogDescription>
           </DialogHeader>
           <div className="flex-grow my-4 bg-gray-200 dark:bg-gray-900 rounded-md overflow-auto flex justify-center p-4">
-            {previewImageUrl && (
+            {isGenerating && !previewImageUrl ? (
+                <div className="flex items-center justify-center h-full">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary"/>
+                </div>
+            ) : previewImageUrl && (
               <Image 
                 src={previewImageUrl} 
                 alt="Resume Preview"
