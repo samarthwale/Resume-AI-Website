@@ -41,7 +41,7 @@ export default function ResumeEditor() {
           company: "Tech Company",
           startDate: "2022-01",
           endDate: "Present",
-          description: "• Developed and maintained web applications using React and Node.js.\n• Collaborated with cross-functional teams to deliver high-quality software.",
+          description: "- Developed and maintained web applications using React and Node.js.\n- Collaborated with cross-functional teams to deliver high-quality software.",
         },
       ],
       education: [
@@ -59,6 +59,12 @@ export default function ResumeEditor() {
           name: "ResumeFlow AI",
           description: "An AI-powered resume builder to create professional resumes with ease.",
           url: "your-resume-flow-ai.com",
+        },
+        {
+          id: crypto.randomUUID(),
+          name: "Personal Portfolio Website",
+          description: "- Developed a responsive personal portfolio website using Next.js and Tailwind CSS to showcase my projects and skills.\n- Integrated a headless CMS (Contentful) for easy content management of blog posts and project details.\n- Deployed the website on Vercel, achieving high performance and SEO scores.",
+          url: "your-portfolio.com",
         },
       ],
       customSections: [],
